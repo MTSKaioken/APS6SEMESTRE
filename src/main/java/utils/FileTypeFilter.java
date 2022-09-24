@@ -1,3 +1,5 @@
+package utils;
+
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
@@ -11,6 +13,7 @@ public class FileTypeFilter extends FileFilter {
         this.description = description;
     }
 
+    @Override
     public boolean accept(File file) {
         if (file.isDirectory()) {
             return true;
