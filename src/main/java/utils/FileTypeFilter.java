@@ -18,6 +18,21 @@ public class FileTypeFilter extends FileFilter {
         if (file.isDirectory()) {
             return true;
         }
+        String extension = Utils.getExtension(file);
+
+        if (extension != null) {
+            if (extension.equals(Utils.tiff) ||
+                    extension.equals(Utils.tif) ||
+                    extension.equals(Utils.gif) ||
+                    extension.equals(Utils.jpeg) ||
+                    extension.equals(Utils.jpg) ||
+                    extension.equals(Utils.png)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         return file.getName().toLowerCase().endsWith(extension);
     }
 

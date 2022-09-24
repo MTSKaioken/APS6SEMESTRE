@@ -12,6 +12,8 @@ public class ImageView extends JFrame {
     private JLabel imagem = new JLabel();
     private JFileChooser files = new JFileChooser();
 
+    private FileTypeFilter filter;
+
     public ImageView() {
         JPanel imagePanel = new JPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +25,7 @@ public class ImageView extends JFrame {
 
         List<FileTypeFilter> filters = new ArrayList<>();
 
-        FileTypeFilter filter = new FileTypeFilter(".jpg", "JPEG Images");
+        filter = new FileTypeFilter(".jpg", "JPEG Images");
         filters.add(filter);
         filter = new FileTypeFilter(".png", "PNG Images");
         filters.add(filter);
@@ -41,6 +43,10 @@ public class ImageView extends JFrame {
 
     public JFileChooser getFiles() {
         return files;
+    }
+
+    public FileTypeFilter getFilter() {
+        return filter;
     }
 
     public JLabel getImagem() {
