@@ -3,12 +3,7 @@ package controller;
 import model.ImageModel;
 import view.ImageView;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class ImageController {
 
@@ -28,7 +23,9 @@ public class ImageController {
     public void processaImagem(String path) {
         //logica pra processar imagem
         if(view.getFilter().accept(view.getFiles().getSelectedFile())) {
-            view.getImagem().setIcon(new ImageIcon(path));
+            view.getImagemEntrada().setIcon(new ImageIcon(path));
+
+            view.getImagemSaida().setIcon(new ImageIcon(path));
             System.out.println(path);
         } else {
             JOptionPane.showMessageDialog(null, "Somente .png e .jpg");

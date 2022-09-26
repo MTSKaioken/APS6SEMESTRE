@@ -1,0 +1,7 @@
+view\ImageView.class
+controller\ImageController.class
+model\ImageModel.class
+utils\Utils.class
+EqualizacaoImagem.class
+utils\FileTypeFilter.class
+utils\JFilePicker.class
