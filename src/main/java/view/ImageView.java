@@ -15,6 +15,10 @@ public class ImageView extends JFrame {
     //private JLabel arrow = new JLabel();
     private JFileChooser files = new JFileChooser();
 
+    private JCheckBox jCheckBox = new JCheckBox("Inverter preto e branco");
+
+    private JSpinner jSpinner = new JSpinner();
+
     private FileTypeFilter filter;
 
     public ImageView() {
@@ -30,10 +34,15 @@ public class ImageView extends JFrame {
 
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
+        jCheckBox.setBounds(0, 300, 155, 14);
+
+        SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 255, 1);
+        jSpinner.setModel(model);
+        jSpinner.setBounds(156, 300, 55, 20);
+
         imagemEntrada.setBounds(20, 300, 416, 560);
         imagemSaida.setBounds(447, 300, 416, 560);
-        //arrow.setIcon(new ImageIcon("C:/Users/KiriD/Documents/Intellij/APS6SEMESTRE/src/main/resources/arrow.jpg"));
-        //arrow.setBounds(270, 400, 10, 10);
+
 
         files.setVisible(true);
 
@@ -57,6 +66,8 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
+        imagePanel.add(jCheckBox);
+        imagePanel.add(jSpinner);
         //imagePanel.add(arrow);
         this.add(imagePanel);
 
@@ -76,5 +87,13 @@ public class ImageView extends JFrame {
 
     public JLabel getImagemSaida() {
         return imagemSaida;
+    }
+
+    public JCheckBox getjCheckBox() {
+        return jCheckBox;
+    }
+
+    public JSpinner getjSpinner() {
+        return jSpinner;
     }
 }

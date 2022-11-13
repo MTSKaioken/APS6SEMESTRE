@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.Point;
-
 public class ManipulatedImage {
     public BufferedImage image;
     public Color[][] matrix;
@@ -32,6 +30,23 @@ public class ManipulatedImage {
         isBW = false;
     }
 
+    public BufferedImage RGBtoMatrizGrises(BufferedImage imagenRGB){
+        FingerPrintImage matrizGrises=new FingerPrintImage(imagenRGB.getHeight(), imagenRGB.getWidth());
+        for(int x=0; x<imagenRGB.getWidth();x++){
+            for (int y = 0; y < imagenRGB.getHeight(); ++y){
+                int rgb = imagenRGB.getRGB(x, y);
+                char r = (char)((rgb >> 16) & 0xFF);
+                char g = (char)((rgb >> 8) & 0xFF);
+                char b = (char)((rgb & 0xFF));
+                char nivelGris = (char)((r + g + b) / 3);
+                matrizGrises.setPixel(x, y, nivelGris);
+            }
+        }
+        FingerPrintImage clon = matrizGrises.copyF();
+        BufferedImage imagenMinutias = clon.copy();
+        return imagenMinutias;
+    }
+
     public FingerPrintImage zhangsuen2(FingerPrintImage entrada){
         boolean cambio1,cambio2;
         do{
@@ -40,6 +55,8 @@ public class ManipulatedImage {
         }while(cambio1 == true || cambio2==true);
         return entrada;
     }
+
+
 
     public BufferedImage minucias(FingerPrintImage imagenentrada) {
         FingerPrintImage clon = imagenentrada.copyF();

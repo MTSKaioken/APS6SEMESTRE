@@ -26,6 +26,10 @@ public class FingerPrintImage {
         return imagen[x][y];
     }
 
+    private char[][] getMImagem() {
+        return imagen;
+    }
+
     public void setPixel(int x, int y, char gris) {
         imagen[x][y] = gris;
     }

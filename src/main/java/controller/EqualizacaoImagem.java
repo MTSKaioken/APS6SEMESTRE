@@ -1,6 +1,5 @@
 package controller;
 
-import controller.ImageController;
 import model.ImageModel;
 import view.ImageView;
 

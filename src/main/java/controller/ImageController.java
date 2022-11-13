@@ -1,12 +1,12 @@
 package controller;
 
 import model.ImageModel;
-import utils.*;
+import utils.FingerPrintImage;
+import utils.ManipulatedImage;
 import view.ImageView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +24,11 @@ public class ImageController {
 
     public void initController() {
         view.getFiles().addActionListener(e -> converteCaminhoEmImagem(view.getFiles().getSelectedFile().getAbsolutePath()));
+
+    }
+
+    private void setaValoresCasoEstejaForaDoIntervalo() {
+        System.out.println("valor alterado");
     }
 
     public void converteCaminhoEmImagem(String path) {
@@ -43,20 +48,26 @@ public class ImageController {
 
             try {
                 BufferedImage img = ImageIO.read(new File(path));
-//                BufferedImage imagemBinarizada = Binarizacao.binarizacaoImagem(img, 45);
                 ManipulatedImage manipulatedImage = new ManipulatedImage(img);
-                manipulatedImage.makeBlackAndWhite(45);
-//                ManipulatedImage manipulatedImage = new ManipulatedImage(imagemBinarizada);
-                manipulatedImage.zhangSuen();
+
+                //imagem em tons de cinza
+                manipulatedImage.makeGrayscale();
+
+                if(view.getjCheckBox().isSelected()) {
+                    manipulatedImage.makeNegative();
+                }
+
+                // Binariza a imagem após colocala em escala de cinza
+                int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
+                manipulatedImage.makeBlackAndWhite(threshold);
 
 
-                FingerPrintImage finger = new FingerPrintImage(manipulatedImage.image.getHeight(),
-                        manipulatedImage.image.getWidth());
 
-                FingerPrintImage fingerPrintImage = manipulatedImage.zhangsuen2(finger);
+                if(view.getjSpinner().getValue().equals(0)) {
+                    System.out.println("valor igual a zero");
+                }
 
-//                FingerPrintImage minucias = fingerPrintImage.invertir();
-//                BufferedImage minucias1 = manipulatedImage.minucias(minucias);
+//                manipulatedImage.zhangSuen();
 
                 view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
             } catch (IOException e) {
@@ -70,5 +81,6 @@ public class ImageController {
     }
 
 }
+
 
 
