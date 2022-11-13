@@ -4,6 +4,7 @@ import utils.FileTypeFilter;
 import utils.JFilePicker;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ImageView extends JFrame {
 
     private JLabel imagemEntrada = new JLabel();
     private JLabel imagemSaida = new JLabel();
-    private JLabel arrow = new JLabel();
+    //private JLabel arrow = new JLabel();
     private JFileChooser files = new JFileChooser();
 
     private FileTypeFilter filter;
@@ -19,17 +20,20 @@ public class ImageView extends JFrame {
     public ImageView() {
         JPanel imagePanel = new JPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(640, 1000);
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+
+        //setSize(640, 1000);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         imagePanel.setLayout(null);
         setResizable(false);
 
-        files.setBounds(10, 10, 610, 300);
+        files.setBounds(0, 0, (int) size.getWidth(), 300);
 
-        imagemEntrada.setBounds(10, 400, 250, 260);
-        imagemSaida.setBounds(360, 400, 250, 260);
-        arrow.setIcon(new ImageIcon("C:\\Users\\KiriD\\Documents\\Intellij\\APS6SEMESTRE\\src\\main\\resources\\arrow.jpg"));
-        arrow.setBounds(270, 400, 10, 10);
+        imagemEntrada.setBounds(20, 300, 416, 560);
+        imagemSaida.setBounds(447, 300, 416, 560);
+        //arrow.setIcon(new ImageIcon("C:/Users/KiriD/Documents/Intellij/APS6SEMESTRE/src/main/resources/arrow.jpg"));
+        //arrow.setBounds(270, 400, 10, 10);
 
         files.setVisible(true);
 
@@ -42,7 +46,8 @@ public class ImageView extends JFrame {
         filters.add(filter);
         filter = new FileTypeFilter(".png", "PNG Images");
         filters.add(filter);
-
+        filter = new FileTypeFilter(".bmp", "BMP Images");
+        filters.add(filter);
 
         for(FileTypeFilter filterExtension : filters){
             files.addChoosableFileFilter(filterExtension);
@@ -52,7 +57,7 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
-        imagePanel.add(arrow);
+        //imagePanel.add(arrow);
         this.add(imagePanel);
 
     }

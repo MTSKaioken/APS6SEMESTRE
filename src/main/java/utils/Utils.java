@@ -7,6 +7,8 @@ public class Utils {
     public final static String jpg = "jpg";
     public final static String png = "png";
 
+    public final static String bmp = "bmp";
+
     /*
      * Get the extension of a file.
      */
