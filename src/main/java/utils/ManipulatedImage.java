@@ -14,14 +14,6 @@ public class ManipulatedImage {
     public String path;
     public boolean isBW;
 
-    //Contrutor, recebe um arquivo de imagem
-    public ManipulatedImage(File f) throws IOException {
-        image = ImageIO.read(f);
-        path = f.getPath();
-        createMatrixByImage();
-        isBW = false;
-    }
-
     //Contrutor, recebe uma Buffered image
     public ManipulatedImage(BufferedImage image) {
         this.image = image;
@@ -47,17 +39,7 @@ public class ManipulatedImage {
         return imagenMinutias;
     }
 
-    public FingerPrintImage zhangsuen2(FingerPrintImage entrada){
-        boolean cambio1,cambio2;
-        do{
-            cambio1=entrada.Iteration(0);
-            cambio2=entrada.Iteration(1);
-        }while(cambio1 == true || cambio2==true);
-        return entrada;
-    }
-
-
-
+    // refatorar
     public BufferedImage minucias(FingerPrintImage imagenentrada) {
         FingerPrintImage clon = imagenentrada.copyF();
         clon = clon.invertir();

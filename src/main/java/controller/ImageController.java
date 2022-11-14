@@ -27,21 +27,9 @@ public class ImageController {
 
     }
 
-    private void setaValoresCasoEstejaForaDoIntervalo() {
-        System.out.println("valor alterado");
-    }
-
     public void converteCaminhoEmImagem(String path) {
         //logica pra processar imagem
         if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
-
-//            try {
-//                BufferedImage img = ImageIO.read(new File(path, "imagemEntrada.jpg"));//carregando a imagem que será equalizada
-//                BufferedImage imagemSaida =
-
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
 
             System.out.println(path);
             view.getImagemEntrada().setIcon(new ImageIcon(path));
@@ -53,21 +41,22 @@ public class ImageController {
                 //imagem em tons de cinza
                 manipulatedImage.makeGrayscale();
 
-                if(view.getjCheckBox().isSelected()) {
+
+                //inverte o preto e o branco da imagem caso a checkbox tiver sido selecionada
+                if (view.getjCheckBox().isSelected()) {
                     manipulatedImage.makeNegative();
                 }
 
-                // Binariza a imagem após colocala em escala de cinza
+
                 int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
+                // Binariza a imagem após colocala em escala de cinza
                 manipulatedImage.makeBlackAndWhite(threshold);
 
+                // aplica o algoritmo de afinamento
+                manipulatedImage.zhangSuen();
 
-
-                if(view.getjSpinner().getValue().equals(0)) {
-                    System.out.println("valor igual a zero");
-                }
-
-//                manipulatedImage.zhangSuen();
+                //refatorar esse método
+                //manipulatedImage.minucias();
 
                 view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
             } catch (IOException e) {
