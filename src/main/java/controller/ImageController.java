@@ -39,7 +39,9 @@ public class ImageController {
                 ManipulatedImage manipulatedImage = new ManipulatedImage(img);
 
                 //imagem em tons de cinza
-                manipulatedImage.makeGrayscale();
+
+
+                //manipulatedImage.makeGrayscale();
 
 
                 //inverte o preto e o branco da imagem caso a checkbox tiver sido selecionada
@@ -50,15 +52,41 @@ public class ImageController {
 
                 int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
                 // Binariza a imagem após colocala em escala de cinza
-                manipulatedImage.makeBlackAndWhite(threshold);
+
 
                 // aplica o algoritmo de afinamento
-                manipulatedImage.zhangSuen();
+//                manipulatedImage.zhangSuen();
 
                 //refatorar esse método
                 //manipulatedImage.minucias();
 
-                view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+                String tipoFiltro = view.getjComboBox().getSelectedItem().toString();
+
+                if (tipoFiltro.equals("Negativo")) {
+                    manipulatedImage.makeGrayscale();
+                    manipulatedImage.makeNegative();
+                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+                } else if (tipoFiltro.equals("Preto e Branco")) {
+                    manipulatedImage.makeGrayscale();
+                    manipulatedImage.makeBlackAndWhite(threshold);
+                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+                } else if (tipoFiltro.equals("Passa Baixa")) {
+                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixa(manipulatedImage.image);
+                    view.getImagemSaida().setIcon(new ImageIcon(passaBaixa));
+                } else if (tipoFiltro.equals("Passa Alta")) {
+                    BufferedImage passaAlta = manipulatedImage.filtroPassaAlta(manipulatedImage.image);
+                    view.getImagemSaida().setIcon(new ImageIcon(passaAlta));
+                } else if (tipoFiltro.equals("Tons de cinza")) {
+                    manipulatedImage.makeGrayscale();
+                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+                } else if (tipoFiltro.equals("Azul")) {
+                    BufferedImage filtroVerde = manipulatedImage.filtroVerde(manipulatedImage.image);
+                    view.getImagemSaida().setIcon(new ImageIcon(filtroVerde));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione um filtro");
+                }
+
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

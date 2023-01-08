@@ -4,6 +4,9 @@
 PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 
 ## Requisitos
+1 - JDK Java 8 ou Superior
+
+2 - Maven 3.1.0 ou Superior
 
 ## Contribuindo no projeto
 1 - a classe main é a EqualizacaoImagem

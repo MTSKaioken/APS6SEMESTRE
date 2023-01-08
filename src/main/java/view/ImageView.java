@@ -19,6 +19,8 @@ public class ImageView extends JFrame {
 
     private JSpinner jSpinner = new JSpinner();
 
+    private JComboBox<String> jComboBox = new JComboBox<>();
+
     private FileTypeFilter filter;
 
     public ImageView() {
@@ -39,6 +41,7 @@ public class ImageView extends JFrame {
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 255, 1);
         jSpinner.setModel(model);
         jSpinner.setBounds(156, 300, 55, 20);
+        jComboBox.setBounds(220, 300, 150, 20);
 
         imagemEntrada.setBounds(20, 300, 416, 560);
         imagemSaida.setBounds(447, 300, 416, 560);
@@ -62,12 +65,18 @@ public class ImageView extends JFrame {
             files.addChoosableFileFilter(filterExtension);
         }
 
+        String[] filtros = { "Preto e Branco", "Negativo", "Passa Baixa", "Passa Alta", "Tons de cinza", "Azul" };
+        jComboBox.setModel(new DefaultComboBoxModel<>(filtros));
+
+
+
 
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
         imagePanel.add(jCheckBox);
         imagePanel.add(jSpinner);
+        imagePanel.add(jComboBox);
         //imagePanel.add(arrow);
         this.add(imagePanel);
 
@@ -95,5 +104,9 @@ public class ImageView extends JFrame {
 
     public JSpinner getjSpinner() {
         return jSpinner;
+    }
+
+    public JComboBox getjComboBox() {
+        return jComboBox;
     }
 }

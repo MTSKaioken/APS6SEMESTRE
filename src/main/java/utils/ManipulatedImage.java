@@ -275,6 +275,117 @@ public class ManipulatedImage {
         createMatrixByImage();
     }
 
+    public BufferedImage filtroPassaBaixa(BufferedImage img){
+        int largura, altura, a, r, g, b;
+        int pixel, novoPixel, elemFiltro, xp, yp;
+
+        double novoA, novoR, novoG, novoB;
+        int somaA, somaR, somaG, somaB;
+
+        int filtro[][] ={{ 1, 1, 1},
+                         { 1, 2, 1},
+                         { 1, 1, 1}};
+
+        BufferedImage novaImg = null;
+        if(img != null){
+            largura = img.getWidth();
+            altura = img.getHeight();
+
+            novaImg = new BufferedImage(largura-2, altura-2, BufferedImage.TYPE_INT_ARGB);
+            for(int y = 1 ; y < altura-1 ; y++){
+                for(int x = 1 ; x < largura-1 ; x++){
+                    somaA = 0;   somaR = 0;   somaG = 0;   somaB = 0;
+
+                    for(int i = 0 ; i < 3 ; i++){
+                        for(int j = 0 ; j < 3 ; j++){
+                            elemFiltro = filtro[i][j];
+                            xp = x-(j-1);   yp = y-(i-1);
+
+                            pixel = img.getRGB(xp,yp);
+
+                            a = (pixel>>24) & 0xff;
+                            somaA = somaA + (a * elemFiltro);
+                            r = (pixel>>16) & 0xff;
+                            somaR = somaR + (r * elemFiltro);
+                            g = (pixel>>8) & 0xff;
+                            somaG = somaG + (g * elemFiltro);
+                            b = pixel & 0xff;
+                            somaB = somaB + (b * elemFiltro);
+
+                        }
+                    }
+                    novoA = somaA / 10;  novoR = somaR / 10;  novoG = somaG / 10;  novoB = somaB / 10;
+
+                    novoPixel = ((int)novoA<<24) | ((int)novoR<<16) | ((int)novoG<<8) | (int)novoB;
+                    novaImg.setRGB(x-1, y-1, novoPixel);
+                }
+            }
+        }
+        return novaImg;
+    }
+
+    public BufferedImage filtroPassaAlta(BufferedImage img){
+        int largura, altura;
+        int a, r, g, b, pixel, novoPixel, elemFiltro, xp, yp;
+        int somaA, somaR, somaG, somaB;
+
+        int filtro[][] = {{ 0, -1, 0},
+                { -1, 4, -1},
+                { 0, -1, 0}};
+
+        BufferedImage novaImg = null;
+        if(img != null){
+            largura = img.getWidth();
+            altura = img.getHeight();
+
+            novaImg = new BufferedImage(largura-2, altura-2, BufferedImage.TYPE_INT_ARGB);
+            for(int y = 1 ; y < altura-1 ; y++){
+                for(int x = 1 ; x < largura-1 ; x++){
+                    somaA = 0;   somaR = 0;   somaG = 0;   somaB = 0;    a = 0;
+                    for(int i = 0 ; i < 3 ; i++){
+                        for(int j = 0 ; j < 3 ; j++){
+                            elemFiltro = filtro[i][j];
+                            xp = x-(j-1);   yp = y-(i-1);
+
+                            pixel = img.getRGB(xp,yp);
+
+                            a = (pixel>>24) & 0xff;
+                            //somaA = somaA + (a * elemFiltro);
+                            r = (pixel>>16) & 0xff;
+                            somaR = somaR + (r * elemFiltro);
+                            g = (pixel>>8) & 0xff;
+                            somaG = somaG + (g * elemFiltro);
+                            b = pixel & 0xff;
+                            somaB = somaB + (b * elemFiltro);
+                        }
+                    }
+                    novoPixel = (a<<24) | (somaR<<16) | (somaG<<8) | somaB;
+                    novaImg.setRGB(x-1, y-1, novoPixel);
+                }
+            }
+        }
+        return novaImg;
+    }
+
+    public BufferedImage filtroVerde(BufferedImage img){
+        int pixel, largura, altura;
+        int a, g;
+        if(img != null){
+            largura = img.getWidth();
+            altura = img.getHeight();
+            for (int y = 0; y < altura; y++){
+                for (int x = 0; x < largura; x++){
+                    pixel = img.getRGB(x,y);
+                    a = (pixel>>24) & 0xff;
+                    g = (pixel>>8) & 0xff;
+                    pixel = (a<<24) | (0<<16) | (g<<8) | 0;
+                    img.setRGB(x, y, pixel);
+                }
+            }
+        }
+        return img;
+    }
+
     //Cria a matrix de pixel a partir da imagem
     private void createMatrixByImage() {
         matrix = new Color[image.getWidth()][image.getHeight()];
