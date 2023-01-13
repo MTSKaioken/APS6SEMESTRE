@@ -32,7 +32,10 @@ public class ImageController {
         if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
 
             System.out.println(path);
-            view.getImagemEntrada().setIcon(new ImageIcon(path));
+            ImageIcon entrada =  new ImageIcon(path);
+            entrada.setImage(entrada.getImage().getScaledInstance(416, 416, 100));
+            view.getImagemEntrada().setIcon(entrada);
+
 
             try {
                 BufferedImage img = ImageIO.read(new File(path));
@@ -62,26 +65,47 @@ public class ImageController {
 
                 String tipoFiltro = view.getjComboBox().getSelectedItem().toString();
 
+
+
+
                 if (tipoFiltro.equals("Negativo")) {
                     manipulatedImage.makeGrayscale();
                     manipulatedImage.makeNegative();
-                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+
+                    ImageIcon saida =  new ImageIcon(manipulatedImage.image);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Preto e Branco")) {
                     manipulatedImage.makeGrayscale();
                     manipulatedImage.makeBlackAndWhite(threshold);
-                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
-                } else if (tipoFiltro.equals("Passa Baixa")) {
-                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixa(manipulatedImage.image);
-                    view.getImagemSaida().setIcon(new ImageIcon(passaBaixa));
+
+                    ImageIcon saida =  new ImageIcon(manipulatedImage.image);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
+                } else if (tipoFiltro.equals("Passa Baixa por media")) {
+                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixaPeloFiltroMedio(manipulatedImage.image);
+
+                    ImageIcon saida = new ImageIcon(passaBaixa);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Passa Alta")) {
-                    BufferedImage passaAlta = manipulatedImage.filtroPassaAlta(manipulatedImage.image);
-                    view.getImagemSaida().setIcon(new ImageIcon(passaAlta));
+                    BufferedImage passaAlta = manipulatedImage.novoFiltroPassaAlta(manipulatedImage.image);
+
+                    ImageIcon saida = new ImageIcon(passaAlta);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Tons de cinza")) {
                     manipulatedImage.makeGrayscale();
-                    view.getImagemSaida().setIcon(new ImageIcon(manipulatedImage.image));
+
+                    ImageIcon saida = new ImageIcon(manipulatedImage.image);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Azul")) {
                     BufferedImage filtroVerde = manipulatedImage.filtroVerde(manipulatedImage.image);
-                    view.getImagemSaida().setIcon(new ImageIcon(filtroVerde));
+
+                    ImageIcon saida = new ImageIcon(filtroVerde);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um filtro");
                 }

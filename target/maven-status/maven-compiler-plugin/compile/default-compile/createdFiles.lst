@@ -1,12 +1,12 @@
-utils\Utils.class
 utils\FileTypeFilter.class
 utils\Binarizacao.class
 view\ImageView.class
-controller\ImageController.class
 utils\Parses.class
 model\ImageModel.class
 utils\Point.class
 utils\ManipulatedImage.class
-utils\JFilePicker.class
 utils\FingerPrintImage.class
 controller\EqualizacaoImagem.class
+utils\Utils.class
+controller\ImageController.class
+utils\JFilePicker.class

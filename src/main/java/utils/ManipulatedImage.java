@@ -275,53 +275,95 @@ public class ManipulatedImage {
         createMatrixByImage();
     }
 
-    public BufferedImage filtroPassaBaixa(BufferedImage img){
-        int largura, altura, a, r, g, b;
-        int pixel, novoPixel, elemFiltro, xp, yp;
+    public BufferedImage novoFiltroPassaAlta(BufferedImage image){
+        int width = image.getWidth();
+        int height = image.getHeight();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = image.getRGB(x, y);
 
-        double novoA, novoR, novoG, novoB;
-        int somaA, somaR, somaG, somaB;
+                // Separa os canais de cor R, G e B
+                int r = (pixel >> 16) & 0xff;
+                int g = (pixel >> 8) & 0xff;
+                int b = pixel & 0xff;
 
-        int filtro[][] ={{ 1, 1, 1},
-                         { 1, 2, 1},
-                         { 1, 1, 1}};
+                // Aplica o filtro de passa alta
+                r = 255 - r;
+                g = 255 - g;
+                b = 255 - b;
 
-        BufferedImage novaImg = null;
-        if(img != null){
-            largura = img.getWidth();
-            altura = img.getHeight();
-
-            novaImg = new BufferedImage(largura-2, altura-2, BufferedImage.TYPE_INT_ARGB);
-            for(int y = 1 ; y < altura-1 ; y++){
-                for(int x = 1 ; x < largura-1 ; x++){
-                    somaA = 0;   somaR = 0;   somaG = 0;   somaB = 0;
-
-                    for(int i = 0 ; i < 3 ; i++){
-                        for(int j = 0 ; j < 3 ; j++){
-                            elemFiltro = filtro[i][j];
-                            xp = x-(j-1);   yp = y-(i-1);
-
-                            pixel = img.getRGB(xp,yp);
-
-                            a = (pixel>>24) & 0xff;
-                            somaA = somaA + (a * elemFiltro);
-                            r = (pixel>>16) & 0xff;
-                            somaR = somaR + (r * elemFiltro);
-                            g = (pixel>>8) & 0xff;
-                            somaG = somaG + (g * elemFiltro);
-                            b = pixel & 0xff;
-                            somaB = somaB + (b * elemFiltro);
-
-                        }
-                    }
-                    novoA = somaA / 10;  novoR = somaR / 10;  novoG = somaG / 10;  novoB = somaB / 10;
-
-                    novoPixel = ((int)novoA<<24) | ((int)novoR<<16) | ((int)novoG<<8) | (int)novoB;
-                    novaImg.setRGB(x-1, y-1, novoPixel);
-                }
+                // Junta os canais de cor de volta em um único pixel
+                pixel = (r << 16) | (g << 8) | b;
+                image.setRGB(x, y, pixel);
             }
         }
-        return novaImg;
+        return image;
+    }
+
+    public BufferedImage filtroPassaBaixaPeloFiltroMedio(BufferedImage imagem){
+        for (int i = 0; i < imagem.getWidth(); i++) {
+            for (int j = 0; j < imagem.getHeight(); j++) {
+                // obtém os valores de vermelho, verde e azul do pixel atual
+                int r = (imagem.getRGB(i, j) >> 16) & 0xff;
+                int g = (imagem.getRGB(i, j) >> 8) & 0xff;
+                int b = imagem.getRGB(i, j) & 0xff;
+
+                // aplica o filtro de passa-baixa aqui
+                // ...
+                int novoR = 0, novoG = 0, novoB = 0;
+                int qtd = 0;
+                for (int m = -1; m <= 1; m++) {
+                    for (int n = -1; n <= 1; n++) {
+                        int x = i + m;
+                        int y = j + n;
+                        if (x >= 0 && x < imagem.getWidth() && y >= 0 && y < imagem.getHeight()) {
+                            int rVizinho = (imagem.getRGB(x, y) >> 16) & 0xff;
+                            int gVizinho = (imagem.getRGB(x, y) >> 8) & 0xff;
+                            int bVizinho = imagem.getRGB(x, y) & 0xff;
+                            novoR += rVizinho;
+                            novoG += gVizinho;
+                            novoB += bVizinho;
+                            qtd++;
+                        }
+                    }
+                }
+                novoR /= qtd;
+                novoG /= qtd;
+                novoB /= qtd;
+
+                r = novoR;
+                g = novoG;
+                b = novoB;
+
+                // atualiza os valores de vermelho, verde e azul do pixel atual
+                int px = (r << 16) | (g << 8) | b;
+                imagem.setRGB(i, j, px);
+            }
+        }
+        return imagem;
+    }
+
+    public BufferedImage filtroPassaBaixaPorMedia(BufferedImage imagem) {
+        for (int i = 0; i < imagem.getWidth(); i++) {
+            for (int j = 0; j < imagem.getHeight(); j++) {
+                // obtém os valores de vermelho, verde e azul do pixel atual
+                int r = (imagem.getRGB(i, j) >> 16) & 0xff;
+                int g = (imagem.getRGB(i, j) >> 8) & 0xff;
+                int b = imagem.getRGB(i, j) & 0xff;
+
+
+                // aplica o filtro de passa-baixa aqui
+                // ...
+                int media = (r + g + b) / 3;
+                r = g = b = media;
+
+                // atualiza os valores de vermelho, verde e azul do pixel atual
+                int px = (r << 16) | (g << 8) | b;
+                imagem.setRGB(i, j, px);
+            }
+        }
+
+        return imagem;
     }
 
     public BufferedImage filtroPassaAlta(BufferedImage img){
