@@ -77,14 +77,12 @@ public class ImageView extends JFrame {
         filters.add(filter);
         filter = new FileTypeFilter(".png", "PNG Images");
         filters.add(filter);
-        filter = new FileTypeFilter(".bmp", "BMP Images");
-        filters.add(filter);
 
         for(FileTypeFilter filterExtension : filters){
             files.addChoosableFileFilter(filterExtension);
         }
 
-        String[] filtros = { "Preto e Branco", "Negativo", "Passa Baixa por media", "Passa Alta", "Tons de cinza", "Azul" };
+        String[] filtros = { "Preto e Branco", "Negativo", "Passa Baixa por media", "Passa Alta", "Tons de cinza", "Azul", "Sobel" };
         jComboBox.setModel(new DefaultComboBoxModel<>(filtros));
 
 

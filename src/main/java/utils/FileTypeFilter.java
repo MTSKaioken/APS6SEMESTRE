@@ -23,8 +23,7 @@ public class FileTypeFilter extends FileFilter {
         if (extension != null) {
             if (extension.equals(Utils.jpeg) ||
                     extension.equals(Utils.jpg) ||
-                    extension.equals(Utils.png) ||
-                    extension.equals(Utils.bmp)) {
+                    extension.equals(Utils.png)) {
                 return true;
             } else {
                 return false;

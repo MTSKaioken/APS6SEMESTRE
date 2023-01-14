@@ -1,3 +1,4 @@
+service\FiltrosService.class
 utils\FileTypeFilter.class
 utils\Binarizacao.class
 view\ImageView.class

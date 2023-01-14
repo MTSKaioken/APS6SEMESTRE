@@ -1,6 +1,7 @@
 package controller;
 
 import model.ImageModel;
+import service.FiltrosService;
 import utils.FingerPrintImage;
 import utils.ManipulatedImage;
 import view.ImageView;
@@ -25,6 +26,17 @@ public class ImageController {
     public void initController() {
         view.getFiles().addActionListener(e -> converteCaminhoEmImagem(view.getFiles().getSelectedFile().getAbsolutePath()));
 
+        view.getjComboBox().addActionListener(e -> bloqueiaThreshold(view.getjComboBox().getSelectedItem().toString()));
+
+    }
+
+    private void bloqueiaThreshold(String tipoFiltro) {
+        System.out.println(tipoFiltro);
+        if (tipoFiltro.equals("Preto e Branco")) {
+            view.getjSpinner().setEnabled(true);
+        } else {
+            view.getjSpinner().setEnabled(false);
+        }
     }
 
     public void converteCaminhoEmImagem(String path) {
@@ -32,7 +44,7 @@ public class ImageController {
         if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
 
             System.out.println(path);
-            ImageIcon entrada =  new ImageIcon(path);
+            ImageIcon entrada = new ImageIcon(path);
             entrada.setImage(entrada.getImage().getScaledInstance(416, 416, 100));
             view.getImagemEntrada().setIcon(entrada);
 
@@ -54,6 +66,7 @@ public class ImageController {
 
 
                 int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
+                view.getjSpinner().setEnabled(false);
                 // Binariza a imagem após colocala em escala de cinza
 
 
@@ -66,20 +79,19 @@ public class ImageController {
                 String tipoFiltro = view.getjComboBox().getSelectedItem().toString();
 
 
-
-
                 if (tipoFiltro.equals("Negativo")) {
                     manipulatedImage.makeGrayscale();
                     manipulatedImage.makeNegative();
 
-                    ImageIcon saida =  new ImageIcon(manipulatedImage.image);
+                    ImageIcon saida = new ImageIcon(manipulatedImage.image);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Preto e Branco")) {
                     manipulatedImage.makeGrayscale();
+                    // desativar o jspinner em todos os outros filtros
                     manipulatedImage.makeBlackAndWhite(threshold);
 
-                    ImageIcon saida =  new ImageIcon(manipulatedImage.image);
+                    ImageIcon saida = new ImageIcon(manipulatedImage.image);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Passa Baixa por media")) {
@@ -94,7 +106,7 @@ public class ImageController {
                     ImageIcon saida = new ImageIcon(passaAlta);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
-                } else if (tipoFiltro.equals("Tons de cinza")) {
+                } else if (tipoFiltro.equals("Tons de cinza")) { // ok
                     manipulatedImage.makeGrayscale();
 
                     ImageIcon saida = new ImageIcon(manipulatedImage.image);
@@ -106,17 +118,26 @@ public class ImageController {
                     ImageIcon saida = new ImageIcon(filtroVerde);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
+                } else if (tipoFiltro.equals("Sobel")) { // ok
+
+                    manipulatedImage.makeGrayscale();
+
+                    //funciona melhor com imagens em escala de cinza
+                    BufferedImage passaAltaSobel = FiltrosService.passaAltaSobel(manipulatedImage.image);
+                    ImageIcon saida = new ImageIcon(passaAltaSobel);
+                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
+                    view.getImagemSaida().setIcon(saida);
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um filtro");
                 }
-
-
-            } catch (IOException e) {
+            } catch (Exception e) {
+                view.getImagemEntrada().setIcon(null);
+                view.getImagemSaida().setIcon(null);
+                JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem!");
                 throw new RuntimeException(e);
             }
-
         } else {
-            JOptionPane.showMessageDialog(null, "Somente .png, .jpg e .bmp");
+            JOptionPane.showMessageDialog(null, "Somente .png e .jpg");
         }
 
     }

@@ -15,22 +15,22 @@ public class ManipulatedImage {
     public boolean isBW;
 
     //Contrutor, recebe uma Buffered image
-    public ManipulatedImage(BufferedImage image) {
+    public ManipulatedImage(BufferedImage image) throws Exception{
         this.image = image;
         path = System.getProperty("user.home") + "/Desktop";
         createMatrixByImage();
         isBW = false;
     }
 
-    public BufferedImage RGBtoMatrizGrises(BufferedImage imagenRGB){
-        FingerPrintImage matrizGrises=new FingerPrintImage(imagenRGB.getHeight(), imagenRGB.getWidth());
-        for(int x=0; x<imagenRGB.getWidth();x++){
-            for (int y = 0; y < imagenRGB.getHeight(); ++y){
+    public BufferedImage RGBtoMatrizGrises(BufferedImage imagenRGB) {
+        FingerPrintImage matrizGrises = new FingerPrintImage(imagenRGB.getHeight(), imagenRGB.getWidth());
+        for (int x = 0; x < imagenRGB.getWidth(); x++) {
+            for (int y = 0; y < imagenRGB.getHeight(); ++y) {
                 int rgb = imagenRGB.getRGB(x, y);
-                char r = (char)((rgb >> 16) & 0xFF);
-                char g = (char)((rgb >> 8) & 0xFF);
-                char b = (char)((rgb & 0xFF));
-                char nivelGris = (char)((r + g + b) / 3);
+                char r = (char) ((rgb >> 16) & 0xFF);
+                char g = (char) ((rgb >> 8) & 0xFF);
+                char b = (char) ((rgb & 0xFF));
+                char nivelGris = (char) ((r + g + b) / 3);
                 matrizGrises.setPixel(x, y, nivelGris);
             }
         }
@@ -62,7 +62,7 @@ public class ManipulatedImage {
 
 
     //Transforma a imagem em escala de cinza
-    public void makeGrayscale() {
+    public void makeGrayscale () throws Exception {
         Color helper;
 
         for (int x = 0; x < image.getWidth(); x++) {
@@ -83,7 +83,7 @@ public class ManipulatedImage {
     }
 
     //Transforma a imagem em escala de cinza
-    public void makeBlackAndWhite(int threshold) {
+    public void makeBlackAndWhite(int threshold) throws Exception{
         makeGrayscale();
 
         for (int x = 0; x < image.getWidth(); x++) {
@@ -103,7 +103,7 @@ public class ManipulatedImage {
     }
 
     //aplica o afinamento de zhangSuen
-    public void zhangSuen() {
+    public void zhangSuen() throws Exception{
         int connected, neighbor;
         Color bk = new Color(0, 0, 0);
         Color wh = new Color(255, 255, 255);
@@ -257,7 +257,7 @@ public class ManipulatedImage {
     }
 
     //Transforma para o negativo da imagem
-    public void makeNegative() {
+    public void makeNegative() throws Exception {
         Color helper;
 
         for (int x = 0; x < image.getWidth(); x++) {
@@ -275,7 +275,7 @@ public class ManipulatedImage {
         createMatrixByImage();
     }
 
-    public BufferedImage novoFiltroPassaAlta(BufferedImage image){
+    public BufferedImage novoFiltroPassaAlta(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         for (int y = 0; y < height; y++) {
@@ -300,7 +300,7 @@ public class ManipulatedImage {
         return image;
     }
 
-    public BufferedImage filtroPassaBaixaPeloFiltroMedio(BufferedImage imagem){
+    public BufferedImage filtroPassaBaixaPeloFiltroMedio(BufferedImage imagem) {
         for (int i = 0; i < imagem.getWidth(); i++) {
             for (int j = 0; j < imagem.getHeight(); j++) {
                 // obtém os valores de vermelho, verde e azul do pixel atual
@@ -366,61 +366,66 @@ public class ManipulatedImage {
         return imagem;
     }
 
-    public BufferedImage filtroPassaAlta(BufferedImage img){
+    public BufferedImage filtroPassaAlta(BufferedImage img) {
         int largura, altura;
         int a, r, g, b, pixel, novoPixel, elemFiltro, xp, yp;
         int somaA, somaR, somaG, somaB;
 
-        int filtro[][] = {{ 0, -1, 0},
-                { -1, 4, -1},
-                { 0, -1, 0}};
+        int filtro[][] = {{0, -1, 0},
+                {-1, 4, -1},
+                {0, -1, 0}};
 
         BufferedImage novaImg = null;
-        if(img != null){
+        if (img != null) {
             largura = img.getWidth();
             altura = img.getHeight();
 
-            novaImg = new BufferedImage(largura-2, altura-2, BufferedImage.TYPE_INT_ARGB);
-            for(int y = 1 ; y < altura-1 ; y++){
-                for(int x = 1 ; x < largura-1 ; x++){
-                    somaA = 0;   somaR = 0;   somaG = 0;   somaB = 0;    a = 0;
-                    for(int i = 0 ; i < 3 ; i++){
-                        for(int j = 0 ; j < 3 ; j++){
+            novaImg = new BufferedImage(largura - 2, altura - 2, BufferedImage.TYPE_INT_ARGB);
+            for (int y = 1; y < altura - 1; y++) {
+                for (int x = 1; x < largura - 1; x++) {
+                    somaA = 0;
+                    somaR = 0;
+                    somaG = 0;
+                    somaB = 0;
+                    a = 0;
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
                             elemFiltro = filtro[i][j];
-                            xp = x-(j-1);   yp = y-(i-1);
+                            xp = x - (j - 1);
+                            yp = y - (i - 1);
 
-                            pixel = img.getRGB(xp,yp);
+                            pixel = img.getRGB(xp, yp);
 
-                            a = (pixel>>24) & 0xff;
+                            a = (pixel >> 24) & 0xff;
                             //somaA = somaA + (a * elemFiltro);
-                            r = (pixel>>16) & 0xff;
+                            r = (pixel >> 16) & 0xff;
                             somaR = somaR + (r * elemFiltro);
-                            g = (pixel>>8) & 0xff;
+                            g = (pixel >> 8) & 0xff;
                             somaG = somaG + (g * elemFiltro);
                             b = pixel & 0xff;
                             somaB = somaB + (b * elemFiltro);
                         }
                     }
-                    novoPixel = (a<<24) | (somaR<<16) | (somaG<<8) | somaB;
-                    novaImg.setRGB(x-1, y-1, novoPixel);
+                    novoPixel = (a << 24) | (somaR << 16) | (somaG << 8) | somaB;
+                    novaImg.setRGB(x - 1, y - 1, novoPixel);
                 }
             }
         }
         return novaImg;
     }
 
-    public BufferedImage filtroVerde(BufferedImage img){
+    public BufferedImage filtroVerde(BufferedImage img) {
         int pixel, largura, altura;
         int a, g;
-        if(img != null){
+        if (img != null) {
             largura = img.getWidth();
             altura = img.getHeight();
-            for (int y = 0; y < altura; y++){
-                for (int x = 0; x < largura; x++){
-                    pixel = img.getRGB(x,y);
-                    a = (pixel>>24) & 0xff;
-                    g = (pixel>>8) & 0xff;
-                    pixel = (a<<24) | (0<<16) | (g<<8) | 0;
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    pixel = img.getRGB(x, y);
+                    a = (pixel >> 24) & 0xff;
+                    g = (pixel >> 8) & 0xff;
+                    pixel = (a << 24) | (0 << 16) | (g << 8) | 0;
                     img.setRGB(x, y, pixel);
                 }
             }
@@ -429,7 +434,7 @@ public class ManipulatedImage {
     }
 
     //Cria a matrix de pixel a partir da imagem
-    private void createMatrixByImage() {
+    private void createMatrixByImage() throws Exception {
         matrix = new Color[image.getWidth()][image.getHeight()];
 
         for (int x = 0; x < image.getWidth(); x++) {
