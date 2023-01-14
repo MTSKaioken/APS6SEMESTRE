@@ -66,7 +66,6 @@ public class ImageController {
 
 
                 int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
-                view.getjSpinner().setEnabled(false);
                 // Binariza a imagem após colocala em escala de cinza
 
 
