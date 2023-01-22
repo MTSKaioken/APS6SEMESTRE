@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ManipulatedImage {
@@ -15,54 +16,16 @@ public class ManipulatedImage {
     public boolean isBW;
 
     //Contrutor, recebe uma Buffered image
-    public ManipulatedImage(BufferedImage image) throws Exception{
+    public ManipulatedImage(BufferedImage image) throws Exception {
         this.image = image;
         path = System.getProperty("user.home") + "/Desktop";
         createMatrixByImage();
         isBW = false;
     }
 
-    public BufferedImage RGBtoMatrizGrises(BufferedImage imagenRGB) {
-        FingerPrintImage matrizGrises = new FingerPrintImage(imagenRGB.getHeight(), imagenRGB.getWidth());
-        for (int x = 0; x < imagenRGB.getWidth(); x++) {
-            for (int y = 0; y < imagenRGB.getHeight(); ++y) {
-                int rgb = imagenRGB.getRGB(x, y);
-                char r = (char) ((rgb >> 16) & 0xFF);
-                char g = (char) ((rgb >> 8) & 0xFF);
-                char b = (char) ((rgb & 0xFF));
-                char nivelGris = (char) ((r + g + b) / 3);
-                matrizGrises.setPixel(x, y, nivelGris);
-            }
-        }
-        FingerPrintImage clon = matrizGrises.copyF();
-        BufferedImage imagenMinutias = clon.copy();
-        return imagenMinutias;
-    }
-
-    // refatorar
-    public BufferedImage minucias(FingerPrintImage imagenentrada) {
-        FingerPrintImage clon = imagenentrada.copyF();
-        clon = clon.invertir();
-        BufferedImage imagenMinutias = clon.copy();
-        Graphics2D g2d = imagenMinutias.createGraphics();
-        g2d.setColor(Color.GREEN);
-        for (int i = 0; i < imagenentrada.getWidth() - 1; i++) {
-            for (int j = 0; j < imagenentrada.getHeight() - 1; j++) {
-                if (imagenentrada.getPixel(i, j) == 1) {
-                    if (imagenentrada.detectarMinucias(i, j) == true) {
-                        g2d.drawRect(i - 10, j - 10, 20, 20);
-                    }
-                }
-
-            }
-        }
-        g2d.dispose();
-        return imagenMinutias;
-    }
-
 
     //Transforma a imagem em escala de cinza
-    public void makeGrayscale () throws Exception {
+    public void makeGrayscale() throws Exception {
         Color helper;
 
         for (int x = 0; x < image.getWidth(); x++) {
@@ -83,7 +46,7 @@ public class ManipulatedImage {
     }
 
     //Transforma a imagem em escala de cinza
-    public void makeBlackAndWhite(int threshold) throws Exception{
+    public void makeBlackAndWhite(int threshold) throws Exception {
         makeGrayscale();
 
         for (int x = 0; x < image.getWidth(); x++) {
@@ -100,160 +63,6 @@ public class ManipulatedImage {
         createImageByMatrix(matrix);
         createMatrixByImage();
         isBW = true;
-    }
-
-    //aplica o afinamento de zhangSuen
-    public void zhangSuen() throws Exception{
-        int connected, neighbor;
-        Color bk = new Color(0, 0, 0);
-        Color wh = new Color(255, 255, 255);
-
-        List<Point> pointsToChange = new ArrayList<>();
-
-        boolean hasChange = true;
-
-        while (hasChange) {
-
-            hasChange = false;
-
-            //Primeira Iteração
-            for (int x = 0; x < matrix.length; x++) {
-                for (int y = 0; y < matrix[x].length; y++) {
-
-                    try {
-                        connected = numberOfConnections(x, y);
-                        neighbor = blackNeighborns(x, y);
-
-                        if ((matrix[x][y].equals(bk))
-                                && (neighbor >= 2)
-                                && (neighbor < 7)
-                                && (connected == 1)
-
-                                && (condition(matrix[x][y - 1].equals(wh)
-                                , matrix[x + 1][y].equals(wh)
-                                , matrix[x][y + 1].equals(wh)))
-
-                                && (condition(matrix[x + 1][y].equals(wh)
-                                , matrix[x][y + 1].equals(wh)
-                                , matrix[x - 1][y].equals(wh)))) {
-
-                            pointsToChange.add(new Point(x, y));
-                            hasChange = true;
-                        }
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-
-            for (Point point : pointsToChange)
-                matrix[point.getX()][point.getY()] = wh;
-
-            pointsToChange.clear();
-
-            //Segunda Iteração
-            for (int x = 0; x < matrix.length; x++) {
-                for (int y = 0; y < matrix[x].length; y++) {
-
-                    try {
-                        connected = numberOfConnections(x, y);
-                        neighbor = blackNeighborns(x, y);
-
-                        if ((matrix[x][y].equals(bk))
-                                && (neighbor >= 2)
-                                && (neighbor < 7)
-                                && (connected == 1)
-
-                                && (condition(matrix[x][y - 1].equals(wh)
-                                , matrix[x + 1][y].equals(wh)
-                                , matrix[x - 1][y].equals(wh)))
-
-                                && (condition(matrix[x][y - 1].equals(wh)
-                                , matrix[x][y + 1].equals(wh)
-                                , matrix[x - 1][y].equals(wh)))) {
-
-                            pointsToChange.add(new Point(x, y));
-                            hasChange = true;
-                        }
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-            for (Point point : pointsToChange)
-                matrix[point.getX()][point.getY()] = wh;
-
-            pointsToChange.clear();
-        }
-
-        createImageByMatrix(matrix);
-        createMatrixByImage();
-        System.out.println("Applied");
-
-    }
-
-    //descobre a quantos pixels pretos
-    // um pixel está conectado
-    private int numberOfConnections(int x, int y) {
-        int count = 0;
-        Color bk = new Color(0, 0, 0);
-        Color wh = new Color(255, 255, 255);
-
-        //p2 p3
-        if (matrix[x][y - 1].equals(wh) && matrix[x + 1][y - 1].equals(bk))
-            count++;
-
-        //p3 p4
-        if (matrix[x + 1][y - 1].equals(wh) && matrix[x + 1][y].equals(bk))
-            count++;
-
-        //p4 p5
-        if (matrix[x + 1][y].equals(wh) && matrix[x + 1][y + 1].equals(bk))
-            count++;
-
-        //p5 p6
-        if (matrix[x + 1][y + 1].equals(wh) && matrix[x][y + 1].equals(bk))
-            count++;
-
-        //p6 p7
-        if (matrix[x][y + 1].equals(wh) && matrix[x - 1][y + 1].equals(bk))
-            count++;
-
-        //p7 p8
-        if (matrix[x - 1][y + 1].equals(wh) && matrix[x - 1][y].equals(bk))
-            count++;
-
-        //p8 p9
-        if (matrix[x - 1][y].equals(wh) && matrix[x - 1][y - 1].equals(bk))
-            count++;
-
-        //p9 p2
-        if (matrix[x - 1][y - 1].equals(wh) && matrix[x][y - 1].equals(bk))
-            count++;
-
-        return count;
-    }
-
-    //testa se as condições dos tres pixels vizinhos são verdadeiras
-    private boolean condition(boolean c1, boolean c2, boolean c3) {
-        int a, b, c;
-
-        a = (c1) ? 0 : 1;
-        b = (c2) ? 0 : 1;
-        c = (c3) ? 0 : 1;
-
-        return (a * b * c) == 0;
-
-    }
-
-    //descobre os pixels pretos vizinhos de um pixel
-    private int blackNeighborns(int x, int y) {
-        return (255 - matrix[x][y - 1].getBlue()
-                + 255 - matrix[x + 1][y - 1].getBlue()
-                + 255 - matrix[x + 1][y].getBlue()
-                + 255 - matrix[x + 1][y + 1].getBlue()
-                + 255 - matrix[x][y + 1].getBlue()
-                + 255 - matrix[x - 1][y + 1].getBlue()
-                + 255 - matrix[x - 1][y].getBlue()
-                + 255 - matrix[x - 1][y - 1].getBlue()) / 255;
     }
 
     //Transforma para o negativo da imagem
@@ -275,163 +84,98 @@ public class ManipulatedImage {
         createMatrixByImage();
     }
 
-    public BufferedImage novoFiltroPassaAlta(BufferedImage image) {
+
+    public BufferedImage equalizarHistogramaParaMelhorarContraste(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int pixel = image.getRGB(x, y);
-
-                // Separa os canais de cor R, G e B
-                int r = (pixel >> 16) & 0xff;
-                int g = (pixel >> 8) & 0xff;
-                int b = pixel & 0xff;
-
-                // Aplica o filtro de passa alta
-                r = 255 - r;
-                g = 255 - g;
-                b = 255 - b;
-
-                // Junta os canais de cor de volta em um único pixel
-                pixel = (r << 16) | (g << 8) | b;
-                image.setRGB(x, y, pixel);
+        BufferedImage equalized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        int[] histogram = new int[256];
+        int[] cdf = new int[256];
+        int[] equalizedValue = new int[256];
+        int totalPixels = width * height;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int color = image.getRGB(x, y);
+                int red = (color >> 16) & 0xff;
+                histogram[red]++;
             }
         }
-        return image;
+        cdf[0] = histogram[0];
+        for (int i = 1; i < 256; i++) {
+            cdf[i] = cdf[i-1] + histogram[i];
+        }
+        for (int i = 0; i < 256; i++) {
+            equalizedValue[i] = (int)(((double)cdf[i] / totalPixels) * 255);
+        }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int color = image.getRGB(x, y);
+                int red = (color >> 16) & 0xff;
+                int green = (color >> 8) & 0xff;
+                int blue = color & 0xff;
+                red = equalizedValue[red];
+                green = equalizedValue[green];
+                blue = equalizedValue[blue];
+                int newColor = (red << 16) | (green << 8) | blue;
+                equalized.setRGB(x, y, newColor);
+            }
+        }
+        return equalized;
     }
 
-    public BufferedImage filtroPassaBaixaPeloFiltroMedio(BufferedImage imagem) {
-        for (int i = 0; i < imagem.getWidth(); i++) {
-            for (int j = 0; j < imagem.getHeight(); j++) {
-                // obtém os valores de vermelho, verde e azul do pixel atual
-                int r = (imagem.getRGB(i, j) >> 16) & 0xff;
-                int g = (imagem.getRGB(i, j) >> 8) & 0xff;
-                int b = imagem.getRGB(i, j) & 0xff;
+    public BufferedImage filtroPassaBaixaPeloFiltroMedianaRemovedorDeRuido(BufferedImage originalImage) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
 
-                // aplica o filtro de passa-baixa aqui
-                // ...
-                int novoR = 0, novoG = 0, novoB = 0;
-                int qtd = 0;
-                for (int m = -1; m <= 1; m++) {
-                    for (int n = -1; n <= 1; n++) {
-                        int x = i + m;
-                        int y = j + n;
-                        if (x >= 0 && x < imagem.getWidth() && y >= 0 && y < imagem.getHeight()) {
-                            int rVizinho = (imagem.getRGB(x, y) >> 16) & 0xff;
-                            int gVizinho = (imagem.getRGB(x, y) >> 8) & 0xff;
-                            int bVizinho = imagem.getRGB(x, y) & 0xff;
-                            novoR += rVizinho;
-                            novoG += gVizinho;
-                            novoB += bVizinho;
-                            qtd++;
+        // Cria uma imagem para armazenar a imagem processada
+        BufferedImage filteredImage = new BufferedImage(width, height, originalImage.getType());
+
+        // Define o tamanho da janela deslizante (neste caso, 3x3)
+        int windowSize = 3;
+        int halfWindow = windowSize / 2;
+
+        // Percorre cada pixel da imagem
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+
+                // Inicializa um array para armazenar os valores de cor dos pixels na janela deslizante
+                int[] redValues = new int[windowSize*windowSize];
+                int[] greenValues = new int[windowSize*windowSize];
+                int[] blueValues = new int[windowSize*windowSize];
+                int pixels = 0;
+                for (int i = -halfWindow; i <= halfWindow; i++) {
+                    for (int j = -halfWindow; j <= halfWindow; j++) {
+                        // Verifica se o pixel está dentro dos limites da imagem
+                        if (x + i >= 0 && x + i < width && y + j >= 0 && y + j < height) {
+                            // Adiciona os valores de cor do pixel ao array
+                            int color = originalImage.getRGB(x + i, y + j);
+                            redValues[pixels] = (color >> 16) & 0xff;
+                            greenValues[pixels] = (color >> 8) & 0xff;
+                            blueValues[pixels] = color & 0xff;
+                            pixels++;
                         }
                     }
                 }
-                novoR /= qtd;
-                novoG /= qtd;
-                novoB /= qtd;
 
-                r = novoR;
-                g = novoG;
-                b = novoB;
+                // Ordena os arrays de valores de cor
+                Arrays.sort(redValues, 0, pixels);
+                Arrays.sort(greenValues, 0, pixels);
+                Arrays.sort(blueValues, 0, pixels);
 
-                // atualiza os valores de vermelho, verde e azul do pixel atual
-                int px = (r << 16) | (g << 8) | b;
-                imagem.setRGB(i, j, px);
-            }
-        }
-        return imagem;
-    }
+                // Obtém a mediana dos valores de cor na janela deslizante
+                int redMedian = redValues[pixels / 2];
+                int greenMedian = greenValues[pixels / 2];
+                int blueMedian = blueValues[pixels / 2];
 
-    public BufferedImage filtroPassaBaixaPorMedia(BufferedImage imagem) {
-        for (int i = 0; i < imagem.getWidth(); i++) {
-            for (int j = 0; j < imagem.getHeight(); j++) {
-                // obtém os valores de vermelho, verde e azul do pixel atual
-                int r = (imagem.getRGB(i, j) >> 16) & 0xff;
-                int g = (imagem.getRGB(i, j) >> 8) & 0xff;
-                int b = imagem.getRGB(i, j) & 0xff;
-
-
-                // aplica o filtro de passa-baixa aqui
-                // ...
-                int media = (r + g + b) / 3;
-                r = g = b = media;
-
-                // atualiza os valores de vermelho, verde e azul do pixel atual
-                int px = (r << 16) | (g << 8) | b;
-                imagem.setRGB(i, j, px);
+                // Define os valores de cor medianos para o pixel atual
+                int newColor = (redMedian << 16) | (greenMedian << 8) | blueMedian;
+                filteredImage.setRGB(x, y, newColor);
             }
         }
 
-        return imagem;
+        return filteredImage;
     }
 
-    public BufferedImage filtroPassaAlta(BufferedImage img) {
-        int largura, altura;
-        int a, r, g, b, pixel, novoPixel, elemFiltro, xp, yp;
-        int somaA, somaR, somaG, somaB;
-
-        int filtro[][] = {{0, -1, 0},
-                {-1, 4, -1},
-                {0, -1, 0}};
-
-        BufferedImage novaImg = null;
-        if (img != null) {
-            largura = img.getWidth();
-            altura = img.getHeight();
-
-            novaImg = new BufferedImage(largura - 2, altura - 2, BufferedImage.TYPE_INT_ARGB);
-            for (int y = 1; y < altura - 1; y++) {
-                for (int x = 1; x < largura - 1; x++) {
-                    somaA = 0;
-                    somaR = 0;
-                    somaG = 0;
-                    somaB = 0;
-                    a = 0;
-                    for (int i = 0; i < 3; i++) {
-                        for (int j = 0; j < 3; j++) {
-                            elemFiltro = filtro[i][j];
-                            xp = x - (j - 1);
-                            yp = y - (i - 1);
-
-                            pixel = img.getRGB(xp, yp);
-
-                            a = (pixel >> 24) & 0xff;
-                            //somaA = somaA + (a * elemFiltro);
-                            r = (pixel >> 16) & 0xff;
-                            somaR = somaR + (r * elemFiltro);
-                            g = (pixel >> 8) & 0xff;
-                            somaG = somaG + (g * elemFiltro);
-                            b = pixel & 0xff;
-                            somaB = somaB + (b * elemFiltro);
-                        }
-                    }
-                    novoPixel = (a << 24) | (somaR << 16) | (somaG << 8) | somaB;
-                    novaImg.setRGB(x - 1, y - 1, novoPixel);
-                }
-            }
-        }
-        return novaImg;
-    }
-
-    public BufferedImage filtroVerde(BufferedImage img) {
-        int pixel, largura, altura;
-        int a, g;
-        if (img != null) {
-            largura = img.getWidth();
-            altura = img.getHeight();
-            for (int y = 0; y < altura; y++) {
-                for (int x = 0; x < largura; x++) {
-                    pixel = img.getRGB(x, y);
-                    a = (pixel >> 24) & 0xff;
-                    g = (pixel >> 8) & 0xff;
-                    pixel = (a << 24) | (0 << 16) | (g << 8) | 0;
-                    img.setRGB(x, y, pixel);
-                }
-            }
-        }
-        return img;
-    }
 
     //Cria a matrix de pixel a partir da imagem
     private void createMatrixByImage() throws Exception {
@@ -449,11 +193,9 @@ public class ManipulatedImage {
         BufferedImage newImage = new BufferedImage(edited.length, edited[0].length,
                 BufferedImage.TYPE_INT_ARGB);
 
-        //System.err.printf("%d %d \n", edited.length, edited[0].length);
 
         for (int x = 0; x < edited.length; x++) {
             for (int y = 0; y < edited[0].length; y++) {
-                //System.err.println(edited[x][y]);
                 if (edited[x][y] != null)
                     newImage.setRGB(x, y, edited[x][y].getRGB());
             }

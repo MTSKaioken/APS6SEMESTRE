@@ -2,7 +2,6 @@ package controller;
 
 import model.ImageModel;
 import service.FiltrosService;
-import utils.FingerPrintImage;
 import utils.ManipulatedImage;
 import view.ImageView;
 
@@ -10,7 +9,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class ImageController {
 
@@ -31,7 +29,6 @@ public class ImageController {
     }
 
     private void bloqueiaThreshold(String tipoFiltro) {
-        System.out.println(tipoFiltro);
         if (tipoFiltro.equals("Preto e Branco")) {
             view.getjSpinner().setEnabled(true);
         } else {
@@ -87,20 +84,21 @@ public class ImageController {
                     view.getImagemSaida().setIcon(saida);
                 } else if (tipoFiltro.equals("Preto e Branco")) {
                     manipulatedImage.makeGrayscale();
-                    // desativar o jspinner em todos os outros filtros
                     manipulatedImage.makeBlackAndWhite(threshold);
 
                     ImageIcon saida = new ImageIcon(manipulatedImage.image);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
-                } else if (tipoFiltro.equals("Passa Baixa por media")) {
-                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixaPeloFiltroMedio(manipulatedImage.image);
+                } else if (tipoFiltro.equals("Remover ruido")) {
+//                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixaPeloFiltroMedioRemovedorDeRuido(manipulatedImage.image);
+                    BufferedImage passaBaixa = manipulatedImage.filtroPassaBaixaPeloFiltroMedianaRemovedorDeRuido(manipulatedImage.image);
 
                     ImageIcon saida = new ImageIcon(passaBaixa);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
-                } else if (tipoFiltro.equals("Passa Alta")) {
-                    BufferedImage passaAlta = manipulatedImage.novoFiltroPassaAlta(manipulatedImage.image);
+                } else if (tipoFiltro.equals("Melhorar contraste")) {
+                    BufferedImage passaAlta = manipulatedImage.equalizarHistogramaParaMelhorarContraste(manipulatedImage.image);
+
 
                     ImageIcon saida = new ImageIcon(passaAlta);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
@@ -111,18 +109,13 @@ public class ImageController {
                     ImageIcon saida = new ImageIcon(manipulatedImage.image);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
-                } else if (tipoFiltro.equals("Azul")) {
-                    BufferedImage filtroVerde = manipulatedImage.filtroVerde(manipulatedImage.image);
+                } else if (tipoFiltro.equals("Detectar Bordas")) { // ok
 
-                    ImageIcon saida = new ImageIcon(filtroVerde);
-                    saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
-                    view.getImagemSaida().setIcon(saida);
-                } else if (tipoFiltro.equals("Sobel")) { // ok
-
-                    manipulatedImage.makeGrayscale();
+//                    manipulatedImage.makeGrayscale();
 
                     //funciona melhor com imagens em escala de cinza
                     BufferedImage passaAltaSobel = FiltrosService.passaAltaSobel(manipulatedImage.image);
+
                     ImageIcon saida = new ImageIcon(passaAltaSobel);
                     saida.setImage(saida.getImage().getScaledInstance(416, 416, 100));
                     view.getImagemSaida().setIcon(saida);
@@ -132,7 +125,7 @@ public class ImageController {
             } catch (Exception e) {
                 view.getImagemEntrada().setIcon(null);
                 view.getImagemSaida().setIcon(null);
-                JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem!");
+                JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem de entrada!");
                 throw new RuntimeException(e);
             }
         } else {

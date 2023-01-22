@@ -82,7 +82,7 @@ public class ImageView extends JFrame {
             files.addChoosableFileFilter(filterExtension);
         }
 
-        String[] filtros = { "Preto e Branco", "Negativo", "Passa Baixa por media", "Passa Alta", "Tons de cinza", "Azul", "Sobel" };
+        String[] filtros = { "Preto e Branco", "Negativo", "Remover ruido", "Melhorar contraste", "Tons de cinza", "Detectar Bordas" };
         jComboBox.setModel(new DefaultComboBoxModel<>(filtros));
 
 
