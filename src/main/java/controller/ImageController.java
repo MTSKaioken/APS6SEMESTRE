@@ -1,6 +1,7 @@
 package controller;
 
 import model.ImageModel;
+import service.FiltroService;
 import service.FiltrosService;
 import utils.ManipulatedImage;
 import view.ImageView;
@@ -11,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class ImageController {
+
+    private FiltroService filtroService;
 
     private final ImageView view;
     private final ImageModel model;
