@@ -1,9 +1,8 @@
-service\FiltrosService.class
 utils\FileTypeFilter.class
 view\ImageView.class
 model\ImageModel.class
-utils\ManipulatedImage.class
 controller\EqualizacaoImagem.class
 utils\Utils.class
 controller\ImageController.class
+service\FiltroService.class
 utils\JFilePicker.class

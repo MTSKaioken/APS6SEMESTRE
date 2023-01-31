@@ -13,6 +13,7 @@ public class ImageView extends JFrame {
 
     private JLabel imagemEntrada = new JLabel();
     private JLabel imagemSaida = new JLabel();
+    private JLabel tituloThreshold = new JLabel();
     //private JLabel arrow = new JLabel();
     private JFileChooser files = new JFileChooser();
 
@@ -38,7 +39,7 @@ public class ImageView extends JFrame {
         setResizable(false);
 
         // dps apagar a linha 41
-        files.setCurrentDirectory(new File("K:\\KiriD\\Documents\\Intellij\\APS6SEMESTRE\\src\\main\\resources"));
+        files.setCurrentDirectory(new File("src/main/resources/"));
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
         //lts
@@ -47,14 +48,15 @@ public class ImageView extends JFrame {
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 255, 1);
         jSpinner.setModel(model);
 
-
+        tituloThreshold.setText("Threshold:");
         //lts
         //jSpinner.setBounds(156, 300, 55, 20);
 
         // lts
         //jComboBox.setBounds(220, 300, 150, 20);
 
-        jCheckBox.setBounds(((int) size.getWidth() / 2) - 165, 300, 155, 14);
+        jCheckBox.setBounds(((int) size.getWidth() / 2) - 225, 300, 155, 14);
+        tituloThreshold.setBounds(((int) size.getWidth() / 2) - 65, 300, 155, 14);
         jSpinner.setBounds(((int) size.getWidth() / 2), 300, 55, 20);
         jComboBox.setBounds(((int) size.getWidth() / 2) + 65 , 300, 150, 20);
 
@@ -91,10 +93,10 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
+        imagePanel.add(tituloThreshold);
         imagePanel.add(jCheckBox);
         imagePanel.add(jSpinner);
         imagePanel.add(jComboBox);
-        //imagePanel.add(arrow);
         this.add(imagePanel);
 
     }
