@@ -1,114 +1,118 @@
 package controller;
 
-import model.ImageModel;
 import service.FiltroService;
-//import utils.ManipulatedImage;
-import view.ImageView;
+import ui.ImageView;
+import utils.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class ImageController {
 
-    private final ImageView view;
-//    private final ImageModel model;
-
-    public ImageController(ImageView view, ImageModel model) {
-        this.view = view;
-//        this.model = model;
-
-    }
+    private ImageView view;
 
     public ImageController(ImageView view) {
         this.view = view;
-//        this.model = model;
-
     }
 
     public void initController() {
+        view.observaFiltroSelecionado(e -> {
+            bloqueiaThresholdComBaseNoFiltro();
+        });
 
-        view.getFiles().addActionListener(e -> converteCaminhoEmImagem(view.getFiles().getSelectedFile().getAbsolutePath()));
-
-        view.getjComboBox().addActionListener(e -> bloqueiaThreshold(view.getjComboBox().getSelectedItem().toString()));
-
+        view.observaArquivoSelecionado(e -> {
+            BufferedImage imagemEntrada = montaImagemEntradaPartindoDoCaminho(view.getFiles()
+                    .getSelectedFile()
+                    .getAbsolutePath());
+            aplicaFiltroSelecionado(imagemEntrada);
+        });
     }
 
-    private void bloqueiaThreshold(String tipoFiltro) {
-        if (tipoFiltro.equals("Preto e Branco")) {
-            view.getjSpinner().setEnabled(true);
+
+    public void bloqueiaThresholdComBaseNoFiltro() {
+        if (view.getFiltros().getSelectedItem().toString().equals("Preto e Branco")) {
+            view.getValorThreshold().setEnabled(true);
         } else {
-            view.getjSpinner().setEnabled(false);
+            view.getValorThreshold().setEnabled(false);
         }
     }
 
-    public void converteCaminhoEmImagem(String path) {
-        //logica pra processar imagem
-        try {
-            if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
-                try {
-                    BufferedImage entrada = ImageIO.read(new File(path));
-                    BufferedImage img = ImageIO.read(new File(path));
-                    atualizaImagemDeEntradaOuDeSaida("entrada", entrada);
-                    FiltroService filtro = new FiltroService();
+    public BufferedImage montaImagemEntradaPartindoDoCaminho(String path) {
+        BufferedImage entrada = null;
 
-                    //inverte o preto e o branco da imagem caso a checkbox tiver sido selecionada
-                    if (view.getjCheckBox().isSelected()) {
-                        img = filtro.tornaImagemNegativa(img);
-                    }
-
-
-                    int threshold = Integer.parseInt(view.getjSpinner().getValue().toString());
-                    String tipoFiltro = view.getjComboBox().getSelectedItem().toString();
-
-
-                    if (tipoFiltro.equals("Negativo")) {
-                        BufferedImage imagemSaida = filtro.tornaImagemNegativa(img);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else if (tipoFiltro.equals("Preto e Branco")) {
-                        BufferedImage imagemSaida = filtro.tornaImagemPretaBranca(img, threshold);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else if (tipoFiltro.equals("Remover ruido")) {
-                        BufferedImage imagemSaida = filtro.filtroPassaBaixaPeloFiltroMedianaRemovedorDeRuido(img);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else if (tipoFiltro.equals("Melhorar contraste")) {
-                        BufferedImage imagemSaida = filtro.equalizarHistogramaParaMelhorarContraste(img);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else if (tipoFiltro.equals("Tons de cinza")) { // ok
-                        BufferedImage imagemSaida = filtro.converteParaTonsDeCinza(img);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else if (tipoFiltro.equals("Detectar Bordas")) { // ok
-                        //funciona melhor com imagens em escala de cinza: ok
-                        BufferedImage imagemSaida = filtro.passaAltaSobel(img);
-                        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Selecione um filtro");
-                    }
-                } catch (Exception e) {
-                    view.getImagemEntrada().setIcon(null);
-                    view.getImagemSaida().setIcon(null);
-                    JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem de entrada!");
-                    e.printStackTrace();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Somente .png e .jpg");
+        if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
+            try {
+                File file = new File(path);
+                entrada = ImageIO.read(file);
+            } catch (IOException | ClassCastException e) {
+                view.limparImagens();
+                JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem de entrada!");
+                throw new RuntimeException(e);
             }
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem de entrada!");
-            e.printStackTrace();
+            atualizaImagemDeEntradaOuDeSaida("entrada", entrada);
         }
+        return entrada;
     }
+
+
+    /**
+     * Metodo que pega o texto selecionado e instancia de forma generica, chamando
+     *
+     * @param entrada
+     */
+    private void aplicaFiltroSelecionado(BufferedImage entrada) {
+
+        String tipoFiltro = view.getFiltros().getSelectedItem().toString();
+        String nomeDaClasseQueImplementaFiltro = StringUtils.toPascalCase(tipoFiltro);
+        int threshold = Integer.parseInt(view.getValorThreshold().getValue().toString());
+
+        if (view.getInverterPretoBranco().isSelected()) {
+//            entrada = filtroServiceImpl.tornaImagemNegativa(entrada);
+        }
+
+        String fqn = "service.impl." + nomeDaClasseQueImplementaFiltro + "ServiceImpl";
+
+        FiltroService instancia = null;
+
+        try {
+            Class<?> classeGenerica = Class.forName(fqn);
+            instancia = (FiltroService) classeGenerica.newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            view.exibirMensagem("Selecione um filtro valido!");
+            throw new RuntimeException(e);
+        }
+
+        BufferedImage imagemSaida = instancia.aplicarFiltro(entrada);
+        atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
+    }
+
 
     private void atualizaImagemDeEntradaOuDeSaida(String entradaOuSaida, BufferedImage imagem) {
-        ImageIcon labelImagem = new ImageIcon(imagem);
-        labelImagem.setImage(labelImagem.getImage().getScaledInstance(416, 416, 100));
+        ImageIcon labelImagem = null;
 
-        if (entradaOuSaida.equals("entrada")) {
-            view.getImagemEntrada().setIcon(labelImagem);
-        } else if (entradaOuSaida.equals("saida")) {
-            view.getImagemSaida().setIcon(labelImagem);
+        try {
+            labelImagem = new ImageIcon(imagem);
+            labelImagem.setImage(labelImagem.getImage().getScaledInstance(416, 416, Image.SCALE_DEFAULT));
+
+            switch (entradaOuSaida) {
+                case "entrada":
+                    view.getImagemEntrada().setIcon(labelImagem);
+                case "saida":
+                    view.getImagemSaida().setIcon(labelImagem);
+            }
+
+        } catch (IllegalArgumentException | NullPointerException e) {
+            view.limparImagens();
+            JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem!");
+            throw new RuntimeException(e);
         }
+
+
     }
 
 }
