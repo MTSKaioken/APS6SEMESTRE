@@ -7,6 +7,12 @@ import java.awt.image.BufferedImage;
 
 public class FiltroNegativoServiceImpl implements FiltroService {
 
+    /**
+     * Aplica um filtro negativo sob a imagem de entrada e retorna uma imagem de saida
+     *
+     * @param imagemEntrada
+     * @return BufferedImage imagemSaida
+     */
     @Override
     public BufferedImage aplicarFiltro(BufferedImage imagemEntrada) {
         int largura = imagemEntrada.getWidth();

@@ -9,6 +9,14 @@ public class FiltroPretoEBrancoServiceImpl implements FiltroService {
 
     private static int threshold = 175;
 
+    /**
+     * Aplica um filtro de escala de cinza (para trabalhar melhor com imagens coloridas),
+     * e depois converte para preto e branco
+     *
+     * @param imagemEntrada
+     * @return BufferedImage imagemSaida
+     */
+
     @Override
     public BufferedImage aplicarFiltro(BufferedImage imagemEntrada) {
         FiltroTonsDeCinzaServiceImpl filtroTonsDeCinzaService = new FiltroTonsDeCinzaServiceImpl();
