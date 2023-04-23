@@ -68,7 +68,7 @@ public class ImageController {
 
         String tipoFiltro = view.getFiltros().getSelectedItem().toString();
         String nomeDaClasseQueImplementaFiltro = StringUtils.toPascalCase(tipoFiltro);
-        int threshold = Integer.parseInt(view.getValorThreshold().getValue().toString());
+//        int threshold = Integer.parseInt(view.getValorThreshold().getValue().toString());
 
         if (view.getInverterPretoBranco().isSelected()) {
 //            entrada = filtroServiceImpl.tornaImagemNegativa(entrada);

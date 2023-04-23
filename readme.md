@@ -22,7 +22,7 @@ PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 - [x] implementado o algoritmo de afinamento/esqueletização de zhangSuen
 ### pendente:
 - [ ] detectação das minucias 
-
+- [ ] Teste que detecte se o filtro no dropdown possui uma classe de implementação
 
 ## Rodando o projeto
 
