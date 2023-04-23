@@ -9,11 +9,10 @@ PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 2 - Maven 3.1.0 ou Superior
 
 ## Contribuindo no projeto
-1 - a classe main é a EqualizacaoImagem
 
-2 - a pasta resources tem as imagens que serão utilizadas para testes
+1 - a pasta resources tem as imagens que serão utilizadas para testes
 
-2.1 - caso queira testar com outras digitais use o software [SFinGeDemo](https://biolab.csr.unibo.it/ResearchPages/sfinge_demo_download.html), ele possui ótimas parametrizações para gerar digitais ficticias. 
+1.1 - caso queira testar com outras digitais use o software [SFinGeDemo](https://biolab.csr.unibo.it/ResearchPages/sfinge_demo_download.html), ele possui ótimas parametrizações para gerar digitais ficticias. 
 
 ### feito:
 - [x] implementado o algoritmo de escala de cinza da imagem
