@@ -1,5 +1,6 @@
 ## Proposta do projeto
- Projeto ainda em progresso, para a disciplina de Atividades Praticas Supervisionadas, do curso de Ciência da Computação, da Universidade Paulista.
+ Projeto ainda em progresso, para a disciplina de Atividades Praticas Supervisionadas, do curso de Ciência da Computação, 
+ da Universidade Paulista.
 
 PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 
@@ -12,7 +13,11 @@ PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 
 1 - a pasta resources tem as imagens que serão utilizadas para testes
 
-1.1 - caso queira testar com outras digitais use o software [SFinGeDemo](https://biolab.csr.unibo.it/ResearchPages/sfinge_demo_download.html), ele possui ótimas parametrizações para gerar digitais ficticias. 
+PS: alterado o escopo do projeto para atender somente filtros (em qualquer imagem). Entretanto, fica uma sugestão:
+
+Caso queira testar com digitais use o software 
+[SFinGeDemo](https://biolab.csr.unibo.it/ResearchPages/sfinge_demo_download.html), ele possui ótimas parametrizações 
+para gerar digitais ficticias. 
 
 ### feito:
 - [x] implementado o algoritmo de escala de cinza da imagem
@@ -20,7 +25,6 @@ PS: assim que concluido, serão adicionadas mais informações sobre o projeto.
 - [x] implementado o algoritmo de binarização da imagem
 - [x] implementado o algoritmo de afinamento/esqueletização de zhangSuen
 ### pendente:
-- [ ] detectação das minucias 
 - [ ] Teste que detecte se o filtro no dropdown possui uma classe de implementação
 
 ## Rodando o projeto
