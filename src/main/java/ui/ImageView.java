@@ -1,6 +1,5 @@
 package ui;
 
-import controller.ImageController;
 import lombok.Getter;
 import lombok.Setter;
 import utils.FileTypeFilter;
@@ -8,7 +7,6 @@ import utils.JFilePicker;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
@@ -17,8 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ImageView extends JFrame {
-
-
 
     private JLabel imagemEntrada = new JLabel();
     private JLabel imagemSaida = new JLabel();

@@ -11,14 +11,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/** Classe controlladora das Imagens, onde serão chamadas as implementações dos filtros.
+ *
+ */
 public class ImageController {
 
     private ImageView view;
 
+    /** Utilização de composição (POO), para termos acesso sobre a view.
+     * @param view ImageView - Classe onde se encontra o UI do software.
+     */
     public ImageController(ImageView view) {
         this.view = view;
     }
 
+    /** Método no qual se encontram os ActionListener da view, que por fim quando chamados executam suas respectivas
+     *  rotinas
+     */
     public void initController() {
         view.observaFiltroSelecionado(e -> {
             bloqueiaThresholdComBaseNoFiltro();
@@ -41,6 +50,12 @@ public class ImageController {
         }
     }
 
+    /**
+     * Converte caminho da imagem em um BufferedImage
+     * @param path String - Caminho absoluto da imagem.
+     * @return BufferedImage entrada - Imagem a partir do caminho.
+     */
+
     public BufferedImage montaImagemEntradaPartindoDoCaminho(String path) {
         BufferedImage entrada = null;
 
@@ -60,9 +75,8 @@ public class ImageController {
 
 
     /**
-     * Metodo que pega o texto selecionado e instancia de forma generica, chamando
-     *
-     * @param entrada
+     * Metodo responsável por chamar a implentação do filtro selecionado.
+     * @param entrada BufferedImage - Imagem a qual terá o filtro aplicado
      */
     private void aplicaFiltroSelecionado(BufferedImage entrada) {
 
@@ -92,6 +106,11 @@ public class ImageController {
     }
 
 
+    /**
+     * Metodo que atualiza imagem de entrada ou saida, extraido para evitar repetição de código
+     * @param entradaOuSaida String - tipo da imagem que será atualizada
+     * @param imagem BufferedImage - imagem que atualizara o campo.
+     */
     private void atualizaImagemDeEntradaOuDeSaida(String entradaOuSaida, BufferedImage imagem) {
         ImageIcon labelImagem = null;
 
@@ -111,8 +130,6 @@ public class ImageController {
             JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem!");
             throw new RuntimeException(e);
         }
-
-
     }
 
 }
