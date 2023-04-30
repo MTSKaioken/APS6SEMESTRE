@@ -18,7 +18,6 @@ public class ImageView extends JFrame {
 
     private JLabel imagemEntrada = new JLabel();
     private JLabel imagemSaida = new JLabel();
-    private JLabel tituloThreshold = new JLabel();
     private JFileChooser files = new JFileChooser();
 
     private JFileChooser exploradorSaida = new JFileChooser();
@@ -66,10 +65,6 @@ public class ImageView extends JFrame {
         files.setVisible(true);
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
-
-
-        tituloThreshold.setBounds(((int) size.getWidth() / 2) - 65, 300, 155, 14);
-        tituloThreshold.setText("Threshold:");
         valorThreshold.setBounds(((int) size.getWidth() / 2), 300, 55, 20);
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 255, 1);
         valorThreshold.setModel(model);
@@ -126,7 +121,6 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
-        imagePanel.add(tituloThreshold);
         imagePanel.add(inverterPretoBranco);
         imagePanel.add(valorThreshold);
         imagePanel.add(filtros);
