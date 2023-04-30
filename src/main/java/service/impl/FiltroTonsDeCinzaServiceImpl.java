@@ -13,10 +13,9 @@ public class FiltroTonsDeCinzaServiceImpl implements FiltroService {
         int largura = imagemEntrada.getWidth();
         int altura = imagemEntrada.getHeight();
 
-        BufferedImage imagemSaida = new BufferedImage(largura, altura, imagemEntrada.getType());
+        BufferedImage imagemSaida = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_ARGB);
 
         try {
-
 
             for (int y = 0; y < altura; y++) {
                 for (int x = 0; x < largura; x++) {

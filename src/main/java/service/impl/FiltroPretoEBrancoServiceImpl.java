@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 public class FiltroPretoEBrancoServiceImpl implements FiltroService {
 
-    private static int threshold = 175;
+    private static final int THRESHOLD = 175;
 
     /**
      * Aplica um filtro de escala de cinza (para trabalhar melhor com imagens coloridas),
@@ -19,18 +19,20 @@ public class FiltroPretoEBrancoServiceImpl implements FiltroService {
 
     @Override
     public BufferedImage aplicarFiltro(BufferedImage imagemEntrada) {
-        FiltroTonsDeCinzaServiceImpl filtroTonsDeCinzaService = new FiltroTonsDeCinzaServiceImpl();
-        BufferedImage imagemSaida = filtroTonsDeCinzaService.aplicarFiltro(imagemEntrada);
+        FiltroService preFiltros = new FiltroMelhorarContrasteServiceImpl();
+        BufferedImage imagemIntermediaria = preFiltros.aplicarFiltro(imagemEntrada);
+
 
         int largura = imagemEntrada.getWidth();
         int altura = imagemEntrada.getHeight();
 
-        try {
+        BufferedImage imagemSaida = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB);
 
+        try {
 
             for (int y = 0; y < altura; y++) {
                 for (int x = 0; x < largura; x++) {
-                    int p = imagemSaida.getRGB(x, y);
+                    int p = imagemIntermediaria.getRGB(x, y);
 
                     int a = (p >> 24) & 0xff;
                     int r = (p >> 16) & 0xff;
@@ -39,7 +41,7 @@ public class FiltroPretoEBrancoServiceImpl implements FiltroService {
 
                     int media = (r + g + b) / 3; // media do valor do rgb
 
-                    if (media < threshold) {
+                    if (media < THRESHOLD) {
                         media = 0; // branco
                     } else {
                         media = 255; // preto

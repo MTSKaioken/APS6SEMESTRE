@@ -19,7 +19,7 @@ public class FiltroRemoverRuidoServiceImpl implements FiltroService {
         int largura = imagemEntrada.getWidth();
         int altura = imagemEntrada.getHeight();
 
-        BufferedImage saida = new BufferedImage(largura, altura, imagemEntrada.getType());
+        BufferedImage saida = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB);
 
         try {
             // Define o tamanho da janela deslizante (neste caso, 3x3)
