@@ -22,7 +22,6 @@ public class ImageView extends JFrame {
 
     private JFileChooser exploradorSaida = new JFileChooser();
     private JCheckBox inverterPretoBranco = new JCheckBox();
-    private JSpinner valorThreshold = new JSpinner();
     private JComboBox<String> filtros = new JComboBox<>();
     private FileTypeFilter filter;
     private JButton botaoSalvar = new JButton();
@@ -65,11 +64,6 @@ public class ImageView extends JFrame {
         files.setVisible(true);
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
-        valorThreshold.setBounds(((int) size.getWidth() / 2), 300, 55, 20);
-        SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 255, 1);
-        valorThreshold.setModel(model);
-
-
         filePicker.setMode(JFilePicker.MODE_OPEN);
 
         String[] filtros = { "Filtro Preto e Branco", "Filtro Negativo", "Filtro Remover ruido", "Filtro Melhorar contraste", "Filtro Tons de cinza", "Filtro Detectar Bordas" };
@@ -105,12 +99,8 @@ public class ImageView extends JFrame {
         JOptionPane.showMessageDialog(null, mensagem);
     }
 
-    public void observaArquivoSelecionado(ActionListener actionListener){
+    public void observaArquivoSelecionado(ActionListener actionListener) {
         files.addActionListener(actionListener);
-    }
-
-    public void observaFiltroSelecionado(ActionListener actionListener){
-        filtros.addActionListener(actionListener);
     }
 
     public void observaSalvarArquivo(ActionListener actionListener){
@@ -122,7 +112,6 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
         imagePanel.add(inverterPretoBranco);
-        imagePanel.add(valorThreshold);
         imagePanel.add(filtros);
         imagePanel.add(botaoSalvar);
         add(imagePanel);

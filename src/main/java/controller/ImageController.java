@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -33,9 +32,6 @@ public class ImageController {
      * rotinas
      */
     public void initController() {
-        view.observaFiltroSelecionado(e -> {
-            bloqueiaThresholdComBaseNoFiltro();
-        });
 
         view.observaArquivoSelecionado(e -> {
             BufferedImage imagemEntrada = montaImagemEntradaPartindoDoCaminho(view.getFiles()
@@ -65,15 +61,6 @@ public class ImageController {
         } catch (IOException e) {
             view.exibirMensagem("Erro ao salvar.");
             throw new RuntimeException(e);
-        }
-    }
-
-
-    public void bloqueiaThresholdComBaseNoFiltro() {
-        if (view.getFiltros().getSelectedItem().toString().equals("Preto e Branco")) {
-            view.getValorThreshold().setEnabled(true);
-        } else {
-            view.getValorThreshold().setEnabled(false);
         }
     }
 
