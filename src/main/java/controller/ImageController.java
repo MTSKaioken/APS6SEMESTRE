@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -42,6 +43,29 @@ public class ImageController {
                     .getAbsolutePath());
             aplicaFiltroSelecionado(imagemEntrada);
         });
+
+        view.observaSalvarArquivo(e -> salvarImagemSaida() );
+}
+
+    private void salvarImagemSaida() {
+        view.getExploradorSaida().showSaveDialog(view);
+
+        File file = view.getExploradorSaida().getSelectedFile();
+
+        String extensao = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".") + 1);
+        Icon icon = view.getImagemSaida().getIcon();
+
+        BufferedImage imagem = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = imagem.createGraphics();
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+
+        try {
+            ImageIO.write(imagem, extensao, file);
+        } catch (IOException e) {
+            view.exibirMensagem("Erro ao salvar.");
+            throw new RuntimeException(e);
+        }
     }
 
 
