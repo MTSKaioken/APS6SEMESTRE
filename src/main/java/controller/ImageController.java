@@ -11,22 +11,25 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/** Classe controlladora das Imagens, onde serão chamadas as implementações dos filtros.
- *
+/**
+ * Classe controlladora das Imagens, onde serão chamadas as implementações dos filtros.
  */
 public class ImageController {
 
     private ImageView view;
 
-    /** Utilização de composição (POO), para termos acesso sobre a view.
+    /**
+     * Utilização de composição (POO), para termos acesso sobre a view.
+     *
      * @param view ImageView - Classe onde se encontra o UI do software.
      */
     public ImageController(ImageView view) {
         this.view = view;
     }
 
-    /** Método no qual se encontram os ActionListener da view, que por fim quando chamados executam suas respectivas
-     *  rotinas
+    /**
+     * Método no qual se encontram os ActionListener da view, que por fim quando chamados executam suas respectivas
+     * rotinas
      */
     public void initController() {
         view.observaFiltroSelecionado(e -> {
@@ -52,6 +55,7 @@ public class ImageController {
 
     /**
      * Converte caminho da imagem em um BufferedImage
+     *
      * @param path String - Caminho absoluto da imagem.
      * @return BufferedImage entrada - Imagem a partir do caminho.
      */
@@ -76,6 +80,7 @@ public class ImageController {
 
     /**
      * Metodo responsável por chamar a implentação do filtro selecionado.
+     *
      * @param entrada BufferedImage - Imagem a qual terá o filtro aplicado
      */
     private void aplicaFiltroSelecionado(BufferedImage entrada) {
@@ -90,7 +95,7 @@ public class ImageController {
 
         String fqn = "service.impl." + nomeDaClasseQueImplementaFiltro + "ServiceImpl";
 
-        FiltroService instancia = null;
+        FiltroService instancia;
 
         try {
             Class<?> classeGenerica = Class.forName(fqn);
@@ -105,18 +110,18 @@ public class ImageController {
         atualizaImagemDeEntradaOuDeSaida("saida", imagemSaida);
     }
 
-
     /**
      * Metodo que atualiza imagem de entrada ou saida, extraido para evitar repetição de código
+     *
      * @param entradaOuSaida String - tipo da imagem que será atualizada
-     * @param imagem BufferedImage - imagem que atualizara o campo.
+     * @param imagem         BufferedImage - imagem que atualizara o campo.
      */
     private void atualizaImagemDeEntradaOuDeSaida(String entradaOuSaida, BufferedImage imagem) {
-        ImageIcon labelImagem = null;
+        ImageIcon labelImagem = new ImageIcon(imagem);
 
         try {
-            labelImagem = new ImageIcon(imagem);
-            labelImagem.setImage(labelImagem.getImage().getScaledInstance(416, 416, Image.SCALE_DEFAULT));
+            labelImagem.setImage(labelImagem.getImage().getScaledInstance(416, 416, Image.SCALE_REPLICATE));
+
 
             switch (entradaOuSaida) {
                 case "entrada":
