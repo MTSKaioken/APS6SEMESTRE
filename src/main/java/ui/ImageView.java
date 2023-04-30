@@ -21,7 +21,6 @@ public class ImageView extends JFrame {
     private JFileChooser files = new JFileChooser();
 
     private JFileChooser exploradorSaida = new JFileChooser();
-    private JCheckBox inverterPretoBranco = new JCheckBox();
     private JComboBox<String> filtros = new JComboBox<>();
     private FileTypeFilter filter;
     private JButton botaoSalvar = new JButton();
@@ -51,12 +50,6 @@ public class ImageView extends JFrame {
         imagemSaida.setBounds(((int) size.getWidth() / 2) + 20, 260, 416, 550);
         imagemSaida.setIcon(iconeDefault);
         imagemEntrada.setIcon(iconeDefault);
-
-
-        inverterPretoBranco.setText("Inverter preto e branco");
-        inverterPretoBranco.setBounds(((int) size.getWidth() / 2) - 225, 300, 155, 14);
-
-
 
         setIconImage(new ImageIcon("src/main/resources/iconePrograma.png").getImage());
 
@@ -111,7 +104,6 @@ public class ImageView extends JFrame {
         imagePanel.add(imagemEntrada);
         imagePanel.add(imagemSaida);
         imagePanel.add(files);
-        imagePanel.add(inverterPretoBranco);
         imagePanel.add(filtros);
         imagePanel.add(botaoSalvar);
         add(imagePanel);
