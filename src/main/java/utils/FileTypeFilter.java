@@ -15,9 +15,6 @@ public class FileTypeFilter extends FileFilter {
 
     @Override
     public boolean accept(File file) {
-        if (file.isDirectory()) {
-            return true;
-        }
         String extension = Utils.getExtension(file);
 
         if (extension != null) {

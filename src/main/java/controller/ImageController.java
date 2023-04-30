@@ -3,6 +3,7 @@ package controller;
 import service.FiltroService;
 import ui.ImageView;
 import utils.StringUtils;
+import utils.Utils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -48,7 +49,7 @@ public class ImageController {
 
         File file = view.getExploradorSaida().getSelectedFile();
 
-        String extensao = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".") + 1);
+        String extensao = Utils.getExtension(file);
         Icon icon = view.getImagemSaida().getIcon();
 
         BufferedImage imagem = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
@@ -74,7 +75,7 @@ public class ImageController {
     public BufferedImage montaImagemEntradaPartindoDoCaminho(String path) {
         BufferedImage entrada = null;
 
-        if (view.getFilter().accept(view.getFiles().getSelectedFile())) {
+        if (view.getFiles().getFileFilter().accept(view.getFiles().getSelectedFile())) {
             try {
                 File file = new File(path);
                 entrada = ImageIO.read(file);

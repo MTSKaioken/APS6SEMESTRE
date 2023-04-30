@@ -9,8 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,7 +20,6 @@ public class ImageView extends JFrame {
 
     private JFileChooser exploradorSaida = new JFileChooser();
     private JComboBox<String> filtros = new JComboBox<>();
-    private FileTypeFilter filter;
     private JButton botaoSalvar = new JButton();
 
     public ImageView() {
@@ -58,20 +55,10 @@ public class ImageView extends JFrame {
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
         filePicker.setMode(JFilePicker.MODE_OPEN);
-
         String[] filtros = { "Filtro Preto e Branco", "Filtro Negativo", "Filtro Remover ruido", "Filtro Melhorar contraste", "Filtro Tons de cinza", "Filtro Detectar Bordas" };
-        List<FileTypeFilter> filters = new ArrayList<>();
-        filter = new FileTypeFilter(".jpg", "jpg Images");
-        filter = new FileTypeFilter(".JPG", "JPG Images");
-        filter = new FileTypeFilter(".jpeg", "jpeg Images");
-        filter = new FileTypeFilter(".JPEG", "JPEG Images");
-        filters.add(filter);
-        filter = new FileTypeFilter(".png", "PNG Images");
-        filter = new FileTypeFilter(".PNG", "PNG Images");
-        filters.add(filter);
-        for(FileTypeFilter filterExtension : filters){
-            files.addChoosableFileFilter(filterExtension);
-        }
+
+        files.addChoosableFileFilter(new FileTypeFilter("jpg", "jpg Images"));
+        files.addChoosableFileFilter(new FileTypeFilter("png", "PNG Images"));
 
         this.filtros.setBounds(((int) size.getWidth() / 2) + 65 , 300, 300, 20);
         this.filtros.setModel(new DefaultComboBoxModel<>(filtros));
