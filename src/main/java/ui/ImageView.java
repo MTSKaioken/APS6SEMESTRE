@@ -55,13 +55,13 @@ public class ImageView extends JFrame {
         files.setBounds(0, 0, (int) size.getWidth(), 300);
 
         filePicker.setMode(JFilePicker.MODE_OPEN);
-        String[] filtros = { "Filtro Preto e Branco", "Filtro Negativo", "Filtro Remover ruido", "Filtro Melhorar contraste", "Filtro Tons de cinza", "Filtro Detectar Bordas" };
+        String[] tiposDefiltros = { "Filtro Preto e Branco", "Filtro Negativo", "Filtro Remover ruido", "Filtro Melhorar contraste", "Filtro Tons de cinza", "Filtro Detectar Bordas" };
 
         files.addChoosableFileFilter(new FileTypeFilter("jpg", "jpg Images"));
         files.addChoosableFileFilter(new FileTypeFilter("png", "PNG Images"));
 
-        this.filtros.setBounds(((int) size.getWidth() / 2) + 65 , 300, 300, 20);
-        this.filtros.setModel(new DefaultComboBoxModel<>(filtros));
+        filtros.setBounds(((int) size.getWidth() / 2) + 65 , 300, 300, 20);
+        filtros.setModel(new DefaultComboBoxModel<>(tiposDefiltros));
 
         botaoSalvar.setBounds(((int) size.getWidth() / 2)  - 436, 760, 872, 30);
         botaoSalvar.setText("Salvar Imagem");
