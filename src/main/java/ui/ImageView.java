@@ -25,6 +25,8 @@ public class ImageView extends JFrame {
     private JComboBox<String> filtros = new JComboBox<>();
     private FileTypeFilter filter;
 
+    private JButton botaoSalvar = new JButton();
+
     public ImageView() {
         setarPropriedadesComponentes();
     }
@@ -43,8 +45,14 @@ public class ImageView extends JFrame {
         setResizable(true);
         setTitle("Processamento de Imagens");
 
+        ImageIcon iconeDefault = new ImageIcon("src/main/resources/no_image.jpg");
+        iconeDefault.setImage(iconeDefault.getImage().getScaledInstance(416, 416, Image.SCALE_REPLICATE));
+
         imagemEntrada.setBounds(((int) size.getWidth() / 2)  - 436, 260, 416, 550);
         imagemSaida.setBounds(((int) size.getWidth() / 2) + 20, 260, 416, 550);
+        imagemSaida.setIcon(iconeDefault);
+        imagemEntrada.setIcon(iconeDefault);
+
 
         inverterPretoBranco.setText("Inverter preto e branco");
         inverterPretoBranco.setBounds(((int) size.getWidth() / 2) - 225, 300, 155, 14);
@@ -70,23 +78,31 @@ public class ImageView extends JFrame {
 
         String[] filtros = { "Filtro Preto e Branco", "Filtro Negativo", "Filtro Remover ruido", "Filtro Melhorar contraste", "Filtro Tons de cinza", "Filtro Detectar Bordas" };
         List<FileTypeFilter> filters = new ArrayList<>();
-        filter = new FileTypeFilter(".jpg", "JPEG Images");
+        filter = new FileTypeFilter(".jpg", "jpg Images");
+        filter = new FileTypeFilter(".JPG", "JPG Images");
+        filter = new FileTypeFilter(".jpeg", "jpeg Images");
+        filter = new FileTypeFilter(".JPEG", "JPEG Images");
         filters.add(filter);
         filter = new FileTypeFilter(".png", "PNG Images");
+        filter = new FileTypeFilter(".PNG", "PNG Images");
         filters.add(filter);
         for(FileTypeFilter filterExtension : filters){
             files.addChoosableFileFilter(filterExtension);
         }
 
-        this.filtros.setBounds(((int) size.getWidth() / 2) + 65 , 300, 150, 20);
+        this.filtros.setBounds(((int) size.getWidth() / 2) + 65 , 300, 300, 20);
         this.filtros.setModel(new DefaultComboBoxModel<>(filtros));
+
+        botaoSalvar.setBounds(((int) size.getWidth() / 2)  - 436, 760, 872, 30);
+        botaoSalvar.setText("Salvar Imagem");
+        botaoSalvar.setFont(new Font("Dialog", Font.BOLD, 16));
 
         adicionarComponentesParaView(imagePanel);
     }
 
     public void limparImagens(){
-        imagemEntrada.setIcon(null);
-        imagemSaida.setIcon(null);
+        imagemEntrada.setIcon(new ImageIcon("src/main/resources/no_image.jpg"));
+        imagemSaida.setIcon(new ImageIcon("src/main/resources/no_image.jpg"));
     }
 
     public void exibirMensagem(String mensagem){
@@ -109,6 +125,7 @@ public class ImageView extends JFrame {
         imagePanel.add(inverterPretoBranco);
         imagePanel.add(valorThreshold);
         imagePanel.add(filtros);
+        imagePanel.add(botaoSalvar);
         add(imagePanel);
         setVisible(true);
     }
