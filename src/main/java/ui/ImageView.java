@@ -20,11 +20,12 @@ public class ImageView extends JFrame {
     private JLabel imagemSaida = new JLabel();
     private JLabel tituloThreshold = new JLabel();
     private JFileChooser files = new JFileChooser();
+
+    private JFileChooser exploradorSaida = new JFileChooser();
     private JCheckBox inverterPretoBranco = new JCheckBox();
     private JSpinner valorThreshold = new JSpinner();
     private JComboBox<String> filtros = new JComboBox<>();
     private FileTypeFilter filter;
-
     private JButton botaoSalvar = new JButton();
 
     public ImageView() {
@@ -115,6 +116,10 @@ public class ImageView extends JFrame {
 
     public void observaFiltroSelecionado(ActionListener actionListener){
         filtros.addActionListener(actionListener);
+    }
+
+    public void observaSalvarArquivo(ActionListener actionListener){
+        botaoSalvar.addActionListener(actionListener);
     }
 
     private void adicionarComponentesParaView(JPanel imagePanel) {
