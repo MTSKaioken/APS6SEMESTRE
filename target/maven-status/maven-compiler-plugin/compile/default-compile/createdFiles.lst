@@ -1,15 +1,13 @@
+ui\ImageView$1.class
 App.class
-utils\FileTypeFilter.class
 service\impl\FiltroDetectarBordasServiceImpl.class
 model\ImageModel.class
 service\impl\FiltroRemoverRuidoServiceImpl.class
 ui\ImageView.class
 service\impl\FiltroPretoEBrancoServiceImpl.class
 service\impl\FiltroMelhorarContrasteServiceImpl.class
-utils\Utils.class
 service\impl\FiltroTonsDeCinzaServiceImpl.class
 utils\StringUtils.class
 service\impl\FiltroNegativoServiceImpl.class
 controller\ImageController.class
 service\FiltroService.class
-utils\JFilePicker.class

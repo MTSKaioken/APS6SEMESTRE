@@ -1,3 +1,5 @@
+K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\App.java
+K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroNegativoServiceImpl.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroDetectarBordasServiceImpl.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroTonsDeCinzaServiceImpl.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroPretoEBrancoServiceImpl.java
@@ -5,12 +7,6 @@ K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\model\ImageModel.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\FiltroService.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroMelhorarContrasteServiceImpl.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\ui\ImageView.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\utils\FileTypeFilter.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\controller\ImageController.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\App.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroNegativoServiceImpl.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\utils\ManipulatedImage.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\utils\Utils.java
-K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\utils\JFilePicker.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\service\impl\FiltroRemoverRuidoServiceImpl.java
+K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\controller\ImageController.java
 K:\KiriD\Documents\Intellij\APS6SEMESTRE\src\main\java\utils\StringUtils.java
