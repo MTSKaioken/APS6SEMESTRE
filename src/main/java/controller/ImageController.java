@@ -3,8 +3,6 @@ package controller;
 import service.FiltroService;
 import ui.ImageView;
 import utils.StringUtils;
-import utils.Utils;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -36,8 +34,7 @@ public class ImageController {
 
         view.observaArquivoSelecionado(e -> {
             BufferedImage imagemEntrada = montaImagemEntradaPartindoDoCaminho(view.getFiles()
-                    .getSelectedFile()
-                    .getAbsolutePath());
+                    .getSelectedFile());
             aplicaFiltroSelecionado(imagemEntrada);
         });
 
@@ -49,7 +46,7 @@ public class ImageController {
 
         File file = view.getExploradorSaida().getSelectedFile();
 
-        String extensao = Utils.getExtension(file);
+        String extensao = StringUtils.getExtension(file);
         Icon icon = view.getImagemSaida().getIcon();
 
         BufferedImage imagem = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
@@ -68,23 +65,25 @@ public class ImageController {
     /**
      * Converte caminho da imagem em um BufferedImage
      *
-     * @param path String - Caminho absoluto da imagem.
+     * @param file String - Caminho absoluto da imagem.
      * @return BufferedImage entrada - Imagem a partir do caminho.
      */
 
-    public BufferedImage montaImagemEntradaPartindoDoCaminho(String path) {
+    public BufferedImage montaImagemEntradaPartindoDoCaminho(File file) {
         BufferedImage entrada = null;
 
-        if (view.getFiles().getFileFilter().accept(view.getFiles().getSelectedFile())) {
+        if (view.getExtensoesAceitas().accept(file)) {
             try {
-                File file = new File(path);
                 entrada = ImageIO.read(file);
             } catch (IOException | ClassCastException e) {
                 view.limparImagens();
-                JOptionPane.showMessageDialog(null, "Falha ao carregar a imagem de entrada!");
+                view.exibirMensagem("Falha ao carregar a imagem de entrada!");
                 throw new RuntimeException(e);
             }
             atualizaImagemDeEntradaOuDeSaida("entrada", entrada);
+        } else {
+            view.exibirMensagem("Arquivo invalido!");
+            throw new IllegalArgumentException("Extensão inválida");
         }
         return entrada;
     }
