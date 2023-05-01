@@ -23,9 +23,10 @@ public class ImageView extends JFrame {
         public boolean accept(File file) {
             String extension = StringUtils.getExtension(file);
             if (extension != null) {
-                if (extension.endsWith("png") || extension.endsWith("jpg")) {
+                if (extension.endsWith("png") || extension.endsWith("jpg") || extension.endsWith("jpeg")) {
                     return true;
                 }
+                return false;
             }
             return false;
         }
